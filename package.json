@@ -6,6 +6,7 @@
     "expo:ios": "expo start --ios",
     "eject": "expo eject",
     "now-build": "NODE_ENV=production webpack --progress --verbose --mode production",
+    "build": "NODE_ENV=production webpack --progress --verbose",
     "start": "webpack-dev-server --config webpack.config.dev.js",
     "analyze": "webpack --profile --json > stats.json && webpack-bundle-analyzer stats.json"
   },

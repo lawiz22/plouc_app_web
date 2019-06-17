@@ -1,6 +1,6 @@
 const path = require('path');
 const paths = require('./paths');
-let API_HOST = '';
+let API_HOST = 'plouc.live';
 if (process.env.NODE_ENV === 'production') API_HOST = 'plouc.live';
 const webpack = require('webpack');
 const rootDirectory = path.resolve(__dirname, '../');
