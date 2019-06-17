@@ -95,8 +95,7 @@ module.exports = {
 
   resolve: {
     alias: {
-      'react-native$': 'react-native-web',
-      'react-navigation$': 'react-navigation/lib/react-navigation.js',
+      'react-native$': 'react-native-web'
     },
     // If you're working on a multi-platform React Native app, web-specific
     // module implementations should be written in files using the extension
