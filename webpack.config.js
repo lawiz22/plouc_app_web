@@ -62,7 +62,7 @@ const babelLoaderLoad = {
 
 const vectorIcon = {
   test: /\.ttf$/,
-  loader: "url-loader", // or directly file-loader
+  loader: "file-loader", // or directly file-loader
   include: path.resolve(__dirname, "node_modules/react-native-vector-icons"),
 }
 
