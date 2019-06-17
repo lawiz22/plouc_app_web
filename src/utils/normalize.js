@@ -1,0 +1,80 @@
+import {schema} from 'normalizr';
+
+
+export const USER = new schema.Entity('USERS');
+
+export const INVITATION = new schema.Entity('INVITATIONS', {
+    receiver: USER,
+    sender: USER,
+});
+
+export const TRANSFER = new schema.Entity('TRANSFERS', {
+    receiver: USER,
+    sender: USER,
+});
+
+export const WALLET = new schema.Entity('WALLETS', {
+    user: USER,
+});
+
+export const ADMINISTRATOR = new schema.Entity('ADMINISTRATORS', {
+    user: USER,
+});
+
+export const MODERATOR = new schema.Entity('MODERATORS', {
+    sponsor: USER,
+    user: USER,
+});
+
+export const POST_REPLY = new schema.Entity('POST_REPLIES', {
+    user: USER,
+});
+export const ALBUM_REPLY = new schema.Entity('ALBUM_REPLIES', {
+    user: USER,
+});
+
+export const ARTIST_REPLY = new schema.Entity('ARTIST_REPLIES', {
+    user: USER,
+});
+
+export const SONG_REPLY = new schema.Entity('SONG_REPLIES', {
+    user: USER,
+});
+
+export const POST_VOTE = new schema.Entity('POST_VOTES');
+
+export const ALBUM_VOTE = new schema.Entity('ALBUM_VOTES');
+
+export const ARTIST_VOTE = new schema.Entity('ARTIST_VOTES');
+
+export const SONG_VOTE = new schema.Entity('SONG_VOTES');
+
+
+export const POST = new schema.Entity('POSTS', {
+    user: USER,
+    post_replies: [POST_REPLY],
+    post_votes: [POST_VOTE],
+});
+
+export const ALBUM = new schema.Entity('ALBUMS', {
+    user: USER,
+    album_replies: [ALBUM_REPLY],
+    album_votes: [ALBUM_VOTE],
+});
+
+export const ARTIST = new schema.Entity('ARTISTS', {
+    user: USER,
+    artist_replies: [ARTIST_REPLY],
+    artist_votes: [ARTIST_VOTE],
+});
+
+export const SONG = new schema.Entity('SONGS', {
+    user: USER,
+    song_replies: [SONG_REPLY],
+    song_votes: [SONG_VOTE],
+});
+
+export const PRIVATE_MESSAGE = new schema.Entity('PRIVATE_MESSAGES', {
+    receiver: USER,
+    sender: USER,
+});
