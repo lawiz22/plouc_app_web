@@ -18,7 +18,7 @@
     "axios": "^0.18.0",
     "babel-plugin-optional-require": "^0.3.1",
     "babel-preset-react-native": "^4.0.1",
-    "babel-polyfill": "^6.9.1",
+    "babel-polyfill": "^6.23.0",
     "css-loader": "^2.1.1",
     "expo": "^32.0.0",
     "glamorous-native": "^1.4.2",
