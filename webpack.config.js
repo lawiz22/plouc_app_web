@@ -77,7 +77,7 @@ module.exports = {
     
   },
   output: {
-    path: path.join(__dirname, 'public', 'web', 'dist'),
+    path: path.join(__dirname, 'web', 'dist'),
     filename: 'js/bundle.js',
   },
   devtool: 'cheap-module-eval-source-map',
