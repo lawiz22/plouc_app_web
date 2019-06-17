@@ -36,7 +36,7 @@ class AppFontLoader extends React.Component {
       await Font.loadAsync({
 
 
-        FontAwesome,
+     
 
 
         MaterialIcons

@@ -83,7 +83,7 @@ module.exports = {
     
   },
   output: {
-    path: path.join(__dirname, 'web', 'dist'),
+    path: path.join(__dirname, 'dist'),
     filename: 'js/bundle.js',
   },
   devtool: 'source-map',

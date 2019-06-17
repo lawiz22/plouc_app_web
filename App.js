@@ -22,6 +22,7 @@ import Home from './src/screens/home';
 
 
 
+
 const middleware = [
   thunk,
   logger
@@ -56,7 +57,7 @@ const theme = {
 class App extends Component {
   render() {
     return (
- 
+    
       <Provider store={store}>
          <PaperProvider theme={theme}>
          <React.Fragment>
@@ -64,7 +65,7 @@ class App extends Component {
                 <style type="text/css">{`
                   @font-face {
                     font-family: 'MaterialIcons';
-                    src: url(${require('@expo/vector-icons/fonts/MaterialIcons.ttf')}) format('truetype');
+                    src: url(${require('react-native-vector-icons/Fonts/MaterialIcons.ttf')}) format('truetype');
                   }
                 `}</style>
               ) : null}
@@ -73,7 +74,7 @@ class App extends Component {
           </React.Fragment>
         </PaperProvider>
       </Provider>
-   
+
     );
   }
 }
