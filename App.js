@@ -12,6 +12,7 @@ import {hashHistory, Router} from "react-router";
 import * as reducers from "./src/reducers";
 import routes from "./src/config/routes";
 
+
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { LOGOUT_SUCCESS } from "./src/config/action-types/authenticate";
@@ -55,6 +56,7 @@ const theme = {
 class App extends Component {
   render() {
     return (
+ 
       <Provider store={store}>
          <PaperProvider theme={theme}>
          <React.Fragment>
@@ -71,7 +73,7 @@ class App extends Component {
           </React.Fragment>
         </PaperProvider>
       </Provider>
-      
+   
     );
   }
 }
