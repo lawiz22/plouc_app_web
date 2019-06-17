@@ -60,6 +60,12 @@ const babelLoaderLoad = {
   loader: 'file-loader',
 }
 
+const vectorIcon = {
+  test: /\.ttf$/,
+  loader: "url-loader", // or directly file-loader
+  include: path.resolve(__dirname, "node_modules/react-native-vector-icons"),
+}
+
 const scssLoader = {
   test: /\.scss/,
   loaders: [
@@ -72,7 +78,7 @@ module.exports = {
   
   entry: path.join(__dirname, 'src', 'Web.js'),
   module: {
-    rules: [babelLoaderConfiguration,babelLoaderElement,babelLoaderLoad,scssLoader]
+    rules: [babelLoaderConfiguration,babelLoaderElement,babelLoaderLoad,scssLoader,vectorIcon]
       
     
   },
