@@ -77,10 +77,10 @@ module.exports = {
     
   },
   output: {
-    path: path.join(__dirname, 'public'),
+    path: path.join(__dirname, 'public', 'web', 'dist'),
     filename: 'js/bundle.js',
   },
-  devtool: 'source-map',
+  devtool: 'cheap-module-eval-source-map',
   plugins: [
     // `process.env.NODE_ENV === 'production'` must be `true` for production
     // builds to eliminate development checks and reduce build size. You may
