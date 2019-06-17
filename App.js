@@ -63,7 +63,7 @@ class App extends Component {
               {Platform.OS === 'web' ? (
                 <style type="text/css">{`
                   @font-face {
-                    font-family: 'MaterialIcons';
+                    font-family: 'Material Icons';
                     src: url(${require('react-native-vector-icons/Fonts/MaterialIcons.ttf')}) format('truetype');
                   }
                 `}</style>
