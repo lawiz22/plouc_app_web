@@ -80,7 +80,7 @@ module.exports = {
     path: path.join(__dirname, 'web', 'dist'),
     filename: 'js/bundle.js',
   },
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'source-map',
   plugins: [
     // `process.env.NODE_ENV === 'production'` must be `true` for production
     // builds to eliminate development checks and reduce build size. You may
@@ -95,7 +95,8 @@ module.exports = {
 
   resolve: {
     alias: {
-      'react-native$': 'react-native-web'
+      'react-native$': 'react-native-web',
+      'react-navigation$': 'react-navigation/lib/react-navigation.js',
     },
     // If you're working on a multi-platform React Native app, web-specific
     // module implementations should be written in files using the extension
