@@ -64,7 +64,7 @@ class App extends Component {
                 <style type="text/css">{`
                   @font-face {
                     font-family: 'MaterialIcons';
-                    src: url(${require('react-native-vector-icons/Fonts/MaterialIcons.ttf')}) format('truetype');
+                    src: url(${require('@expo/vector-icons/fonts/MaterialIcons.ttf')}) format('truetype');
                   }
                 `}</style>
               ) : null}
