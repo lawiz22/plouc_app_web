@@ -75,8 +75,8 @@ const scssLoader = {
 
 
 module.exports = {
-  
-  entry: path.join(__dirname, 'src', 'Web.js'),
+  entry: ['babel-polyfill', './src/Web.js'],
+ 
   module: {
     rules: [babelLoaderConfiguration,babelLoaderElement,babelLoaderLoad,scssLoader,vectorIcon]
       
