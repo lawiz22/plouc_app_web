@@ -5,14 +5,8 @@ module.exports = function(api) {
   return {
     plugins: ['@babel/plugin-proposal-class-properties', 'optional-require'],
 
-    presets: ['babel-preset-expo','@babel/preset-env',
-    {
-      "targets": {
-        "node": "10"
-      }
-    }
-  ], '@babel/preset-react', '@babel/preset-flow']
+    presets: ['babel-preset-expo','@babel/preset-env', '@babel/preset-react', '@babel/preset-flow']
 
-
+    
   };
 };
