@@ -1,7 +1,7 @@
 const path = require('path');
 const paths = require('./paths');
-let API_HOST = 'plouc.live';
-if (process.env.NODE_ENV === 'production') API_HOST = 'plouc.live';
+let API_HOST = 'https://plouc.live';
+if (process.env.NODE_ENV === 'production') API_HOST = 'https://plouc.live';
 const webpack = require('webpack');
 const rootDirectory = path.resolve(__dirname, '../');
 const babelLoaderConfiguration = {
