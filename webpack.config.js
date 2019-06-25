@@ -1,7 +1,7 @@
 const path = require('path');
 const paths = require('./paths');
-let API_HOST = 'https://plouc.live';
-if (process.env.NODE_ENV === 'production') API_HOST = 'https://plouc.live';
+let API_HOST = 'plouc.live';
+if (process.env.NODE_ENV === 'production') API_HOST = 'plouc.live';
 const webpack = require('webpack');
 const rootDirectory = path.resolve(__dirname, '../');
 const babelLoaderConfiguration = {
@@ -94,7 +94,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production'),
-        'API_ROOT': JSON.stringify(`http://${API_HOST}`)
+        'API_ROOT': JSON.stringify(`https://${API_HOST}`)
     }
     }),
   ],
