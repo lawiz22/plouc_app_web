@@ -6,7 +6,10 @@ import { DefaultTheme, Appbar, Title, Badge, Button as ButPaper } from 'react-na
 import Styles, { COLOR } from "../../config/styles";
 import { bindActionCreators } from "redux";
 import * as authActions from "../../actions/authenticate";
+import * as albumActions from "../../actions/albums";
 import * as songActions from "../../actions/songs";
+
+import {getAlbum} from '../../utils/user';
 
 import { connect } from "react-redux";
 
@@ -60,17 +63,18 @@ class HeaderSongDetail extends Component {
 
   render() {
     const {activeUser} = this.props;
+    const {albums} = this.props;
     return (
       <View style={styles.container}>
       
-      <Appbar.Header theme={{ colors: { primary: COLOR.ARTIST }}} >
+      <Appbar.Header theme={{ colors: { primary: COLOR.SONG }}} >
                
                {this.props.activeUser? <Appbar.Action icon="edit" />: null }
                
             
                 <Appbar.Content
-                title={this.props.usersongs_status.songDetail.song}
-                subtitle=""
+                title={this.props.usersongs_status.songDetail.song_title}
+                subtitle={getAlbum(this.props.usersongs_status.songDetail.album, albums)}
                 style ={{ alignItems: 'center' }} 
                 />
                 <Appbar.Action icon="clear" onPress={() =>{ this.showSongdetail()}} /> 
@@ -114,12 +118,13 @@ const styles = StyleSheet.create({
                 activeUser: state.activeUser,
                 usersongs_status : state.list_song,
                 usersongs : state.list_song.songList,
+                albums: state.albums.data,
                 
              }),
     dispatch => ({
                 actions: bindActionCreators(authActions, dispatch),
                 songs: bindActionCreators(songActions, dispatch),
-                
+                albumactions: bindActionCreators(albumActions, dispatch),
                 })
 )(HeaderSongDetail);
 

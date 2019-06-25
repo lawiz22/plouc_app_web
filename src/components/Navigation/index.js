@@ -38,7 +38,20 @@ class Navigation extends Component {
 
     
   }
-
+  state = {
+    url: null,
+    pip: false,
+    playing: true,
+    controls: false,
+    light: false,
+    volume: 0.8,
+    muted: false,
+    played: 0,
+    loaded: 0,
+    duration: 0,
+    playbackRate: 1.0,
+    loop: false
+  }
   componentDidMount(){
     console.log(this.props.userposts_status.showPostfront)
 
@@ -90,7 +103,18 @@ componentWillMount(){
     this.props.songs.show_song_front(this.page.shotSongFront)
   }
 
- 
+  onPlay = () => {
+    console.log('onPlay')
+    this.setState({ playing: true })
+  }
+
+  onProgress = state => {
+    console.log('onProgress', state)
+    // We only want to update time slider if we are not currently seeking
+    if (!this.state.seeking) {
+      this.setState(state)
+    }
+  }
 
   render() {
     const {activeUser} = this.props;
@@ -123,12 +147,7 @@ componentWillMount(){
                 style ={{ alignItems: 'flex-start' }} 
                 />
                 
-                <ReactPlayer url={`${settings.API_ROOT}${(this.props.usersongs_status.songDetail != null)?this.props.usersongs_status.songDetail.audio_file:'/media/Bombe_au_clock.mp3'}`} playing={true} controls={true} height={500}width={300} onPause={this.onPause}
-                    onPlay={this.onPlay}
-                    onReady={() => console.log('onReady')}
-                    onStart={() => console.log('onStart')}
-                    
-                    />
+                
                 <Image
                                       source={pasRandomLogo}
                                       style={{ width: 220, height: 50 }}

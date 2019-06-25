@@ -275,7 +275,7 @@ class PostAll extends Component {
       <View style={{
                             
                             height: 700,
-                            //width: 850,
+                            width: 450,
                             borderRightColor:  COLOR.POST,
                             borderRightWidth: 4,
                             borderLeftColor:  COLOR.POST,
@@ -310,7 +310,7 @@ class PostAll extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'flex-start',
+    alignItems: 'stretch',
     //marginTop: -10,
     //justifyContent: 'center',
     //margeRight: 20,

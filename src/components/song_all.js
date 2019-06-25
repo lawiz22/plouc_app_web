@@ -17,6 +17,7 @@ import {hashHistory} from 'react-router'
 import HeaderSongAll from '../components/HeaderSongAll'
 import {getAlbum} from '../utils/user';
 import {getAlbumArtist} from '../utils/user';
+import { getAudioBuffer, getContext } from '../utils/user';
 
 
 class SongAll extends Component {
@@ -31,6 +32,11 @@ class SongAll extends Component {
           {id: 0}
         ]
     };
+    this.state = {
+      
+      buffer: null,
+      context: null,
+    }
     
 }
   componentDidMount() {
@@ -49,9 +55,20 @@ class SongAll extends Component {
 
 componentWillMount(){
 
+  const context = getContext();
+  this.setState({
+    context
+  });
   this.props.songs.get_song_list()
   this.props.albumactions.get_album_list()
 }
+
+
+getFile = async (path = `${settings.API_ROOT}${(this.props.usersongs_status.songDetail != null)?this.props.usersongs_status.songDetail.audio_file:'/media/Bombe_au_clock.mp3'}`) => {
+  const buffer = await getAudioBuffer(path, this.state.context);
+  console.log ({ buffer })
+  this.setState({ buffer });
+};
 
 handlePlusdeSong = () => {
   this.page.limit  = this.page.limit + this.page.increase
@@ -81,6 +98,8 @@ set_songDetail = (item) => {
   console.log(item)
   this.props.songs.store_song_detail(item)
   this.props.songs.getSong(item.id)
+  this.getFile()
+
   if (this.page.songDetail.id == item.id){
      this.page.songDetail.id = 0
      if (this.page.showSongDetailview){
@@ -128,8 +147,9 @@ showSongdetail = (item) => {
         // console.log(songList)
         if (this.props.usersongs_status.setSongrandom)
             songList = this.shuffle(songList)
-        songList = songList.slice(0,this.props.usersongs_status.songLimit)      
-
+        if (songList.length !== 0) {
+          songList = songList.slice(0,this.props.usersongs_status.songLimit)      
+        }
         if (songList.length !== 0) return (
             
             <View >
@@ -179,7 +199,7 @@ page = {
                     
       <View style={{
                             
-                            height: 700,
+                            height: 675,
                             width: 450,
                             borderRightColor:  COLOR.SONG,
                             borderRightWidth: 4,

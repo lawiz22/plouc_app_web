@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Animated, View, Image, StyleSheet, TouchableWithoutFeedback, Text, ScrollView, FlatList as FlatListSong } from 'react-native';
+import { Dimensions, View, Image, StyleSheet, TouchableWithoutFeedback, Text, ScrollView, FlatList as FlatListSong } from 'react-native';
 import { Avatar, Card, Paragraph, Badge, Appbar, Title, Button as ButPaper, List, IconButton} from 'react-native-paper';
 // import { Avatar } from 'react-native-elements';
 
@@ -12,10 +12,21 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import settings from '../config/settings';
 
+import {getAlbumArtist, getAudioBuffer, getContext } from '../utils/user';
+
+
+
 
 import {hashHistory} from 'react-router'
 import HeaderSongDetail from '../components/HeaderSongDetail'
 import {getFullName, getProfileImage} from '../utils/user';
+import AlbumArt from '../components/player/AlbumArt';
+import TrackDetails from '../components/player/TrackDetails';
+import ReactPlayer from 'react-player';
+import SeekBar from '../components/player/SeekBar';
+import Controls from '../components/player/Controls';
+import Waveform from '../lib';
+
 
 class SongDetail extends Component {
 
@@ -27,12 +38,46 @@ class SongDetail extends Component {
           {id: 0}
         ]
     };
+    this.state = {
+          url: null,
+          pip: false,
+          playing: false,
+          controls: false,
+          light: false,
+          volume: 0.8,
+          muted: false,
+          played: 0,
+          playedSeconds: 0,
+          loaded: 0,
+          duration: 0,
+          playbackRate: 1.0,
+          loop: false,
+          paused: true,
+          progress: 0,
+          totalLength: 1,
+          currentPosition: 0,
+          buffer: null,
+          context: null,
+        }
   }
 
+  componentWillMount() {
+    const context = getContext();
+    this.setState({
+      context
+    });
+     
+  }
   componentDidMount() {
-    
-}
+    this.getFile()
+     
+  }
 
+
+_shouldUpdateProgressBar() {
+  // Debounce progress bar update by 200 ms
+  return Date.now() - this.lastSeek > 200;
+}
 
 getSongreply(songId) {
 
@@ -230,8 +275,82 @@ getSongreply(songId) {
       return goEsti.length;
          
   }
+
+  onPlay = () => {
+    console.log('onPlay')
+    this.setState({ playing: true })
+  }
+
+  onEnded = () => {
+    console.log('onEnded')
+    this.setState({ playing: this.state.loop })
+  }
+
+  onProgress = state => {
+    console.log('onProgress', state)
+    // We only want to update time slider if we are not currently seeking
+    if (!this.state.seeking) {
+      this.setState(state)
+    }
+  }
+
+  playPause = () => {
+    this.setState({ playing: !this.state.playing })
+  }
+  onSeekMouseDown = e => {
+    this.setState({ seeking: true })
+  }
+  onSeekChange = e => {
+    this.setState({ played: parseFloat(e.target.value) })
+  }
+  onSeekMouseUp = e => {
+    this.setState({ seeking: false })
+    this.player.seekTo(parseFloat(e.target.value))
+  }
+  ref = player => {
+    this.player = player
+  }
+
+  onPause = () => {
+    console.log('onPause')
+    this.setState({ playing: false })
+  }
+  onDuration = (duration) => {
+    console.log('onDuration', duration)
+    this.setState({ totalLength: Math.floor(duration) });
+    this.setState({ duration })
+    console.log('totalLength', this.state.totalLength)
+  }
+
+  getFile = async (path = `${settings.API_ROOT}${(this.props.usersongs_status.songDetail != null)?this.props.usersongs_status.songDetail.audio_file:'/media/Bombe_au_clock.mp3'}`) => {
+    const buffer = await getAudioBuffer(path, this.state.context);
+    console.log ( buffer )
+    this.setState({ buffer });
+  };
+
+  seek(time) {
+    
+    //time = Math.floor(time);
+
+    this.player.seekTo(time, () => {
+        this.setState({
+          currentPosition: time,
+        
+      });
+      
+    });
+    this.setState({
+      currentPosition: time,
+     
+    });
+    this.setState({ seeking: false })
+  }
+
+
   render() {
     const {activeUser} = this.props;
+    const {albums} = this.props;
+    const { url, playing, controls, light, volume, muted, loop, played, playedSeconds, loaded, duration, playbackRate, pip } = this.state
     return (
       
       <div className="SongAll">
@@ -243,7 +362,7 @@ getSongreply(songId) {
                         
       <View style={{
                             
-                            height: 700,
+                            height: 675,
                             //width: 850,
                             borderRightColor:  COLOR.SONG,
                             borderRightWidth: 4,
@@ -258,41 +377,122 @@ getSongreply(songId) {
                             borderBottomColor:  COLOR.SONG,
                             borderBottomWidth: 40,
                             justifyContent: 'center',
-                            alignItems: 'stretch',
+                            alignItems: 'flex-start', backgroundColor: 'rgb(4,4,4)'
                         }} >
-            <ScrollView style={[Styles.container, { padding: 0 }]}>            
-            
-            
-                                         
-            </ScrollView>
-
-                                                  
-                        
-      </View>
+                  
+                  <ScrollView style={ { padding: 10 }}>
+                        <View style={styles.container} >
+                              <Image source = {{ uri: `${settings.API_ROOT}${this.props.usersongs_status.songDetail.song_image}`}} style={styles.image}  />          
+                              <TrackDetails title={ this.props.usersongs_status.songDetail.song_title } artist={ getAlbumArtist(this.props.usersongs_status.songDetail.album, albums) } />
+                              
+                               <SeekBar
+                                
+                                onSeek={this.seek.bind(this)}
+                                
+                                trackLength={ this.state.totalLength } 
+                                onSlidingStart={() => this.setState({ seeking: true })}
+                                currentPosition={playedSeconds}
+                                
+                                />
+                               <Controls  
+                                    onPressPlay={() => {this.playPause()}}
+                                    onPressPause={() =>{this.playPause()}}
+                                    paused={playing}  
+                                />
+                                <View style={{ marginTop: 15 , padding : 15}} >
+                                <Waveform
+                                    // Audio buffer
+                                    buffer={this.state.buffer}
+                                    // waveform height
+                                    height={125}
+                                    animate= {true}
+                                    markerStyle={{
+                                      // Position marker color
+                                      color: COLOR.SONG,
+                                      // Position marker width (in pixels)
+                                      width: 3
+                                    }}
+                                    // Optionally handle user manually changing position (0 - 1)
+                                    onPositionChange={pos => this.seek(pos)}
+                                    // Wave plot type (line or bar)
+                                    plot='line'
+                                    // Marker position on waveform (0 - 1)
+                                    position={played}
+                                    // redraw waveform on window size change (default: true)
+                                    responsive={false}
+                                    // Show position marker
+                                    showPosition={true}
+                                    waveStyle={{
+                                      // animate waveform on draw (default: true)
+                                      animate: true,
+                                      // waveform color
+                                      color: COLOR.POST,
+                                      plot: 'line',
+                                      // width of each rendered point (min: 1, max: 10)
+                                      pointWidth: 3
+                                    }}
+                                    // waveform width
+                                    width={350}
+                                    
+                                  /></View>
+                               <ReactPlayer
+                                    ref={this.ref} 
+                                    url={`${settings.API_ROOT}${(this.props.usersongs_status.songDetail != null)?this.props.usersongs_status.songDetail.audio_file:'/media/Bombe_au_clock.mp3'}`} 
+                                    playing={playing} 
+                                    controls={controls} 
+                                    className='react-player'
+                                    height={0}
+                                    width={350}
+                                    onPause={this.onPause}
+                                    onEnded={this.onEnded}
+                                    onPlay={this.onPlay}
+                                    onBuffer={() => console.log('onBuffer')}
+                                    onReady={() => console.log('onReady')}
+                                    onStart={() => console.log('onStart')}
+                                    onSeek={e => console.log('onSeek', e)}
+                                    onProgress={this.onProgress}
+                                    onError={e => console.log('onError', e)}
+                                    onDuration={this.onDuration}
+                    
+                                />
+                                
+                                
+                                </View>
+                                                 
+                        </ScrollView>
+                             </View>
      
       </div>
  
     );
   }
 }
+//<input
+//                                    type='range' min={0} max={1} step='any'
+//                                   value={played}
+//                                    width={450}
+//                                    onMouseDown={this.onSeekMouseDown}
+//                                    onChange={this.onSeekChange}
+//                                    onMouseUp={this.onSeekMouseUp}
+//                                    
+//                               />
 
+
+const { width, height } = Dimensions.get('window');
+const imageSize = height - 200;
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'flex-start',
-    //marginTop: -10,
-    //justifyContent: 'center',
-    //margeRight: 20,
-    paddingBottom: 20,
-    borderBottomColor:  COLOR.SONG,
-    borderBottomWidth: 40,
+    flex : 1,
+    justifyContent: 'space-between',
+
   },
   image: {
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    width: 100,
-    height: 100,
+    borderRadius: 5,
+    borderWidth: 4,
+    borderColor: COLOR.SONG,
+    marginLeft: 70,
+    width: imageSize-400,
+    height: imageSize-400,
   },
 
   
@@ -310,13 +510,14 @@ export default connect(
               useralbums_status : state.list_album,
               usersongs : state.list_song.songList,
               // songVotes: state.songVotes.data,
+              albums: state.albums.data,
               song: state.songs.data,
               users: state.users.data
            }),
   dispatch => ({
               actions: bindActionCreators(authActions, dispatch),
               actionssongs: bindActionCreators(songActions, dispatch),
-              albums: bindActionCreators(albumActions, dispatch),
+              albumactions: bindActionCreators(albumActions, dispatch),
               })
 )(SongDetail);
 
