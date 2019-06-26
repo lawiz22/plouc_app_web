@@ -37,7 +37,7 @@ const Controls = ({
       
       <IconButton
             icon="play-circle-outline"
-            color={Colors.green800}
+            color={COLOR.POST}
             size={75}
             onPress={onPressPause}
           />

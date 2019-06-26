@@ -59,7 +59,7 @@ const babelLoaderElement = {
 }
 
 const babelLoaderLoad = {
-  test: /\.(jpg|png|woff|woff2|eot|ttf|svg)$/,
+  test: /\.(jpg|gif|png|woff|woff2|eot|ttf|svg)$/,
   loader: 'file-loader',
 }
 

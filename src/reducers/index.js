@@ -3,6 +3,7 @@ import list_post from "./post";
 import list_artist from "./artist";
 import list_album from "./album";
 import list_song from "./song";
+import player_state from './player';
 import list_user_song from "./song_user";
 import users from './models/accounts/users';
 import activeUser from './application/active-user';
@@ -18,12 +19,14 @@ import songs from './models/songs/song';
 
 
 
+
 export { authenticate, 
          list_post, 
          list_artist, 
          list_album, 
          list_song, 
-         list_user_song, 
+         list_user_song,
+         player_state, 
          activeUser, 
          postVotes, 
          posts, 

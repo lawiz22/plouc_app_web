@@ -62,14 +62,23 @@ class SongDetail extends Component {
   }
 
   componentWillMount() {
-    const context = getContext();
-    this.setState({
-      context
-    });
+    
      
   }
+  componentWillReceiveProps() {
+    const buffer = this.props.player_state.audioBuffer
+    console.log(buffer)
+    this.setState({
+      buffer
+    });
+    console.log(buffer)
+  }
   componentDidMount() {
-    this.getFile()
+    const buffer = this.props.player_state.audioBuffer
+    console.log(buffer)
+    this.setState({
+      buffer
+    });
      
   }
 
@@ -322,9 +331,10 @@ getSongreply(songId) {
     console.log('totalLength', this.state.totalLength)
   }
 
-  getFile = async (path = `${settings.API_ROOT}${(this.props.usersongs_status.songDetail != null)?this.props.usersongs_status.songDetail.audio_file:'/media/Bombe_au_clock.mp3'}`) => {
+  getFile = async (path = `${settings.API_ROOT}${this.props.usersongs_status.songDetail.audio_file}`) => {
     const buffer = await getAudioBuffer(path, this.state.context);
     console.log ( buffer )
+    console.log (this.state.context)
     this.setState({ buffer });
   };
 
@@ -346,11 +356,62 @@ getSongreply(songId) {
     this.setState({ seeking: false })
   }
 
+  renderWaveform = () => {
+    const { url, playing, controls, light, volume, muted, loop, played, playedSeconds, loaded, duration, playbackRate, pip } = this.state
+    
+    return (
+         <View style={{  marginTop: 15 , padding : 15}} >
+                             
+                                  <Waveform
+                                    // Audio buffer
+                                    buffer={this.props.player_state.audioBuffer}
+                                    // waveform height
+                                    height={125}
+                                    animate= {false}
+                                    markerStyle={{
+                                      // Position marker color
+                                      color: COLOR.SONG,
+                                      // Position marker width (in pixels)
+                                      width: 3
+                                    }}
+                                    // Optionally handle user manually changing position (0 - 1)
+                                    onPositionChange={pos => console.log(pos)}
+                                    // Wave plot type (line or bar)
+                                    plot='line'
+                                    // Marker position on waveform (0 - 1)
+                                    position={played}
+                                    // redraw waveform on window size change (default: true)
+                                    responsive={false}
+                                    // Show position marker
+                                    showPosition={true}
+                                    waveStyle={{
+                                      // animate waveform on draw (default: true)
+                                      animate: false,
+                                      // waveform color
+                                      color: COLOR.POST,
+                                      plot: 'line',
+                                      // width of each rendered point (min: 1, max: 10)
+                                      pointWidth: 3
+                                    }}
+                                    // waveform width
+                                    width={350}
+                                    
+                                  />
+                                  {this.props.player_state.requestingAudioBuffer? <Image 
+                                      style={{ borderRadius: 100 ,backgroundColor: '#333' , opacity : 0.8, position:'absolute', left : + 150,top: + 40, padding : 2, height: 80, width : 80, tintColor : COLOR.ALBUM }}
+                                      source={require('../images/Cheetah.gif')}> 
+                                  </Image>  : null}
+                                   {this.props.player_state.requestingAudioBuffer? <Text style={{ color : COLOR.POST}}> !!!                   COMPUTING WAVEFORM                   !!! </Text>
+                                   : null}
+                                    </View>
+      );
+    }
 
   render() {
     const {activeUser} = this.props;
     const {albums} = this.props;
     const { url, playing, controls, light, volume, muted, loop, played, playedSeconds, loaded, duration, playbackRate, pip } = this.state
+    
     return (
       
       <div className="SongAll">
@@ -399,42 +460,7 @@ getSongreply(songId) {
                                     onPressPause={() =>{this.playPause()}}
                                     paused={playing}  
                                 />
-                                <View style={{ marginTop: 15 , padding : 15}} >
-                                <Waveform
-                                    // Audio buffer
-                                    buffer={this.state.buffer}
-                                    // waveform height
-                                    height={125}
-                                    animate= {true}
-                                    markerStyle={{
-                                      // Position marker color
-                                      color: COLOR.SONG,
-                                      // Position marker width (in pixels)
-                                      width: 3
-                                    }}
-                                    // Optionally handle user manually changing position (0 - 1)
-                                    onPositionChange={pos => this.seek(pos)}
-                                    // Wave plot type (line or bar)
-                                    plot='line'
-                                    // Marker position on waveform (0 - 1)
-                                    position={played}
-                                    // redraw waveform on window size change (default: true)
-                                    responsive={false}
-                                    // Show position marker
-                                    showPosition={true}
-                                    waveStyle={{
-                                      // animate waveform on draw (default: true)
-                                      animate: true,
-                                      // waveform color
-                                      color: COLOR.POST,
-                                      plot: 'line',
-                                      // width of each rendered point (min: 1, max: 10)
-                                      pointWidth: 3
-                                    }}
-                                    // waveform width
-                                    width={350}
-                                    
-                                  /></View>
+                               {this.renderWaveform()}
                                <ReactPlayer
                                     ref={this.ref} 
                                     url={`${settings.API_ROOT}${(this.props.usersongs_status.songDetail != null)?this.props.usersongs_status.songDetail.audio_file:'/media/Bombe_au_clock.mp3'}`} 
@@ -494,6 +520,13 @@ const styles = StyleSheet.create({
     width: imageSize-400,
     height: imageSize-400,
   },
+  logo: {
+    //width: 480,
+    //height: 115,
+    opacity: 0.8,
+    position : 'absolute',
+    top : +10
+   },
 
   
   
@@ -509,6 +542,7 @@ export default connect(
               usersongs_status : state.list_song,
               useralbums_status : state.list_album,
               usersongs : state.list_song.songList,
+              player_state : state.player_state,
               // songVotes: state.songVotes.data,
               albums: state.albums.data,
               song: state.songs.data,

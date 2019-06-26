@@ -8,6 +8,7 @@ import {SONG} from '../utils/normalize';
 import settings from '../config/settings';
 
 import * as types from "../config/action-types/song";
+import * as typeP from "../config/action-types/player";
 
 export function get_song_list( limit, offset ) { // Fake authentication function
     return async dispatch => {
@@ -77,26 +78,58 @@ export function store_song_detail(songDetail) { // Fake logout request
     return async dispatch => {
          // Dispatch a logout request
         try {
-            setTimeout(async () => { // Add a 1.5 second delay to fake an asynchronous ajax request
-                // await AsyncStorage.removeItem(DATA_SESSION); // Remove the session data and unauthenticate the user
+            
                 console.log(songDetail)
                 dispatch(set_Detail_songSuccess(songDetail)) // Dispatch a logout success action
-            }, 200)
+            
+            } catch (err) { // When something goes wrong
+            dispatch(reset_songFailed("Something went wrong"))
+        }
+    }
+}
+
+export function store_audio_context(audioContext) { 
+    return async dispatch => {
+         
+        try {
+            setTimeout(async () => { // Add a 1.5 second delay to fake an asynchronous ajax request
+                
+                console.log(audioContext)
+                dispatch(set_Audio_contextSuccess(audioContext))
+            }, )
         } catch (err) { // When something goes wrong
             dispatch(reset_songFailed("Something went wrong"))
         }
     }
 }
 
+export function store_audio_buffer(audioBuffer) { 
+    return async dispatch => {
+        
+        try {
+             // Add a 1.5 second delay to fake an asynchronous ajax request
+                
+                console.log(audioBuffer)
+                const audioBuffer2 = Object.values(audioBuffer)
+                console.log(audioBuffer2[0])
+                dispatch(set_Audio_bufferSuccess(audioBuffer2[0]))
+            
+        } catch (err) { // When something goes wrong
+            dispatch(reset_songFailed("Something went wrong"))
+        }
+    }
+}
+
+
 export function show_song_detail(showDetail) { // Fake logout request
     return async dispatch => {
          // Dispatch a logout request
         try {
-            setTimeout(async () => { // Add a 1.5 second delay to fake an asynchronous ajax request
+             // Add a 1.5 second delay to fake an asynchronous ajax request
                 // await AsyncStorage.removeItem(DATA_SESSION); // Remove the session data and unauthenticate the user
                 
                 dispatch(show_Detail_songSuccess(showDetail)) // Dispatch a logout success action
-            }, 200)
+            
         } catch (err) { // When something goes wrong
             dispatch(reset_songFailed("Something went wrong"))
         }
@@ -311,6 +344,36 @@ function show_Detail_songSuccess(showDetail) {
         type: types.SET_DETAILVIEW_SONG_SUCCESS,
         data: {
             showDetail
+        }
+    };
+}
+
+function set_Audio_contextSuccess(audioContext) {
+    return {
+        type: typeP.LOAD_AUDIO_CONTEXT_SUCCESS,
+        data: {
+            audioContext
+        }
+    };
+}
+
+export function set_Audio_bufferRequest() {
+    return {
+        type: typeP.LOAD_AUDIO_BUFFER_REQUEST
+    };
+}
+
+export function flush_Audio_bufferSuccess() {
+    return {
+        type: typeP.FLUSH_AUDIO_BUFFER_SUCCESS
+    };
+}
+
+function set_Audio_bufferSuccess(audioBuffer) {
+    return {
+        type: typeP.LOAD_AUDIO_BUFFER_SUCCESS,
+        data: {
+            audioBuffer
         }
     };
 }

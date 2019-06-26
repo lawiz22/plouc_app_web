@@ -45,7 +45,7 @@ class SongAll extends Component {
      // console.log(this.props.state.authSession.data.id);
      // this.props.state.isAuth
     
-     this.props.songs.reset_song_list(this.page.limit,this.page.offset)
+    
      this.page.showSongDetailview = this.props.usersongs_status.showSongDetailview
      
      
@@ -55,18 +55,38 @@ class SongAll extends Component {
 
 componentWillMount(){
 
+   //this.props.songs.reset_song_list(this.page.limit,this.page.offset)
   const context = getContext();
   this.setState({
     context
   });
+  //this.props.songs.store_audio_context(context)
+ 
+  this.props.songs.get_song_list()
+  this.props.albumactions.get_album_list()
+}
+
+componentWillUnmount(){
+
+  // const context = getContext();
+  
+  this.setState({
+    context : null
+  });
+  
+ 
   this.props.songs.get_song_list()
   this.props.albumactions.get_album_list()
 }
 
 
-getFile = async (path = `${settings.API_ROOT}${(this.props.usersongs_status.songDetail != null)?this.props.usersongs_status.songDetail.audio_file:'/media/Bombe_au_clock.mp3'}`) => {
+getFile = async (audio_file, path = `${settings.API_ROOT}${audio_file}`) => {
+  console.log(path)
+  this.props.songs.set_Audio_bufferRequest()
   const buffer = await getAudioBuffer(path, this.state.context);
   console.log ({ buffer })
+  // console.log (this.state.context)
+  this.props.songs.store_audio_buffer({ buffer })
   this.setState({ buffer });
 };
 
@@ -94,16 +114,23 @@ shuffle = (arr) => {
 }
 
 set_songDetail = (item) => {
-        
+  this.props.songs.flush_Audio_bufferSuccess()
   console.log(item)
+  this.getFile(item.audio_file)
   this.props.songs.store_song_detail(item)
   this.props.songs.getSong(item.id)
-  this.getFile()
-
+  
+  
+    
+  
+  
   if (this.page.songDetail.id == item.id){
      this.page.songDetail.id = 0
      if (this.page.showSongDetailview){
       this.showSongdetail(item)
+      
+    }else {
+      
     }
     }
      
@@ -111,8 +138,9 @@ set_songDetail = (item) => {
      {
       this.page.songDetail.id = item.id
       if (!this.page.showSongDetailview){
-         this.showSongdetail(item)}else {
-          
+         this.showSongdetail(item)
+          }else {
+           
        }
       }   
 
@@ -120,7 +148,7 @@ set_songDetail = (item) => {
 
 showSongdetail = (item) => {
         
-        
+   
   this.page.showSongDetailview = !this.props.usersongs_status.showSongDetailview
   
   this.props.songs.show_song_detail(this.page.showSongDetailview)
@@ -315,6 +343,7 @@ export default connect(
   state => ({ state: state.authenticate,
               usersongs_status : state.list_song,
               usersongs : state.list_song.songList,
+              player_state : state.player_state.audioBuffer,
               albums: state.albums.data,
               song: state.albums.data,
            }),
