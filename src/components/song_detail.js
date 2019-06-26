@@ -514,8 +514,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent : 'space-evenly',
     // marginLeft : imageSize-620,
-    width: imageSizeW-815,
-    height: imageSizeW-815,
+    width: '100%',
+    height: 350,
   },
   logo: {
     //width: 480,
