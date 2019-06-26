@@ -9,12 +9,14 @@ import * as authActions from "../../actions/authenticate";
 import * as albumActions from "../../actions/albums";
 import * as songActions from "../../actions/songs";
 
+import settings from '../../config/settings';
+
 import {getAlbum} from '../../utils/user';
 
 import { connect } from "react-redux";
 
 import {hashHistory} from 'react-router'
-
+import { getAudioBuffer, getContext } from '../../utils/user';
 
 
 
@@ -32,6 +34,7 @@ class HeaderSongDetail extends Component {
   componentDidMount() {
   
     this.page.showSongDetailview = this.props.usersongs_status.showSongDetailview
+    this.page.showWaveform = this.props.player_state.showWaveform
 
   }
   showSongfront = () => {
@@ -40,6 +43,15 @@ class HeaderSongDetail extends Component {
     
     this.props.songs.show_song_front(this.page.shotSongFront)
   }
+
+  getFile = async (audio_file, path = `${settings.API_ROOT}${audio_file}`) => {
+    console.log(path)
+    this.props.songs.set_Audio_bufferRequest()
+    const buffer = await getAudioBuffer(path, this.props.player_state.audioContext);
+  
+    this.props.songs.store_audio_buffer({ buffer })
+    
+  };
 
   set_songListview = () => {
         
@@ -53,6 +65,22 @@ class HeaderSongDetail extends Component {
     this.page.showSongDetailview = !this.props.usersongs_status.showSongDetailview
     
     this.props.songs.show_song_detail(this.page.showSongDetailview)
+  }
+
+  showAudioWaveform = () => {
+
+    this.props.songs.flush_Audio_bufferSuccess()
+    console.log(this.props.player_state.showWaveform)
+    if (this.props.player_state.showWaveform == false) {
+      
+      this.getFile(this.props.usersongs_status.songDetail.audio_file)
+    }
+
+    this.page.showWaveform = !this.props.player_state.showWaveform
+    
+    this.props.songs.show_audio_waveform(this.page.showWaveform)
+       
+
   }
 
   page = {
@@ -70,7 +98,8 @@ class HeaderSongDetail extends Component {
       <Appbar.Header theme={{ colors: { primary: COLOR.SONG }}} >
                
                {this.props.activeUser? <Appbar.Action icon="edit" />: null }
-               
+               {(this.props.activeUser && !this.props.player_state.showWaveform)? <Appbar.Action icon="blur-on" onPress={() =>{ this.showAudioWaveform()}}/>: null }
+               {(this.props.activeUser && this.props.player_state.showWaveform)? <Appbar.Action icon="blur-on" style={{ backgroundColor : COLOR.ARTIST }} onPress={() =>{ this.showAudioWaveform()}}/>: null }
             
                 <Appbar.Content
                 title={this.props.usersongs_status.songDetail.song_title}
@@ -119,6 +148,7 @@ const styles = StyleSheet.create({
                 usersongs_status : state.list_song,
                 usersongs : state.list_song.songList,
                 albums: state.albums.data,
+                player_state : state.player_state,
                 
              }),
     dispatch => ({

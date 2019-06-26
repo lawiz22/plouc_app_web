@@ -74,6 +74,21 @@ export function show_song_front(showFront) { // Fake logout request
     }
 }
 
+export function show_audio_waveform(showWaveform) { // Fake logout request
+    return async dispatch => {
+         // Dispatch a logout request
+        try {
+            setTimeout(async () => { // Add a 1.5 second delay to fake an asynchronous ajax request
+                // await AsyncStorage.removeItem(DATA_SESSION); // Remove the session data and unauthenticate the user
+                
+                dispatch(show_Audio_waveformSuccess(showWaveform)) // Dispatch a logout success action
+            }, 400)
+        } catch (err) { // When something goes wrong
+            dispatch(reset_songFailed("Something went wrong"))
+        }
+    }
+}
+
 export function store_song_detail(songDetail) { // Fake logout request
     return async dispatch => {
          // Dispatch a logout request
@@ -95,6 +110,8 @@ export function store_audio_context(audioContext) {
             setTimeout(async () => { // Add a 1.5 second delay to fake an asynchronous ajax request
                 
                 console.log(audioContext)
+                const audioContext2 = Object.values(audioContext)
+                console.log(audioContext[0])
                 dispatch(set_Audio_contextSuccess(audioContext))
             }, )
         } catch (err) { // When something goes wrong
@@ -165,6 +182,15 @@ function show_Front_songSuccess(showFront) {
         type: types.SET_SONGS_VIEW_SUCCESS,
         data: {
             showFront
+        }
+    };
+}
+
+function show_Audio_waveformSuccess(showWaveform) {
+    return {
+        type: typeP.SHOW_AUDIO_WAVEFORM_SUCCESS,
+        data: {
+            showWaveform
         }
     };
 }

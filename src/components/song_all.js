@@ -60,7 +60,7 @@ componentWillMount(){
   this.setState({
     context
   });
-  //this.props.songs.store_audio_context(context)
+  this.props.songs.store_audio_context(context)
  
   this.props.songs.get_song_list()
   this.props.albumactions.get_album_list()
@@ -114,9 +114,11 @@ shuffle = (arr) => {
 }
 
 set_songDetail = (item) => {
-  this.props.songs.flush_Audio_bufferSuccess()
+  if (this.props.player_show_waveform == true) {
+    this.props.songs.flush_Audio_bufferSuccess()
+    this.getFile(item.audio_file)
+  }
   console.log(item)
-  this.getFile(item.audio_file)
   this.props.songs.store_song_detail(item)
   this.props.songs.getSong(item.id)
   
@@ -344,6 +346,7 @@ export default connect(
               usersongs_status : state.list_song,
               usersongs : state.list_song.songList,
               player_state : state.player_state.audioBuffer,
+              player_show_waveform : state.player_state.showWaveform,
               albums: state.albums.data,
               song: state.albums.data,
            }),

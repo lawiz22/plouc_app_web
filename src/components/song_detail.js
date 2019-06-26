@@ -66,19 +66,14 @@ class SongDetail extends Component {
      
   }
   componentWillReceiveProps() {
-    const buffer = this.props.player_state.audioBuffer
-    console.log(buffer)
-    this.setState({
-      buffer
-    });
-    console.log(buffer)
+    
   }
   componentDidMount() {
-    const buffer = this.props.player_state.audioBuffer
-    console.log(buffer)
-    this.setState({
-      buffer
-    });
+    //const buffer = this.props.player_state.audioBuffer
+    //console.log(buffer)
+    //this.setState({
+    //  buffer
+    // });
      
   }
 
@@ -399,7 +394,7 @@ getSongreply(songId) {
                                   />
                                   {this.props.player_state.requestingAudioBuffer? <Image 
                                       style={{ borderRadius: 100 ,backgroundColor: '#333' , opacity : 0.8, position:'absolute', left : + 150,top: + 40, padding : 2, height: 80, width : 80, tintColor : COLOR.ALBUM }}
-                                      source={require('../images/Cheetah.gif')}> 
+                                      source={require('../images/live.svg')}> 
                                   </Image>  : null}
                                    {this.props.player_state.requestingAudioBuffer? <Text style={{ color : COLOR.POST}}> !!!                   COMPUTING WAVEFORM                   !!! </Text>
                                    : null}
@@ -460,7 +455,7 @@ getSongreply(songId) {
                                     onPressPause={() =>{this.playPause()}}
                                     paused={playing}  
                                 />
-                               {this.renderWaveform()}
+                               {this.props.player_state.showWaveform? this.renderWaveform() : null }
                                <ReactPlayer
                                     ref={this.ref} 
                                     url={`${settings.API_ROOT}${(this.props.usersongs_status.songDetail != null)?this.props.usersongs_status.songDetail.audio_file:'/media/Bombe_au_clock.mp3'}`} 

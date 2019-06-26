@@ -6,7 +6,7 @@ const initialState_A = {
   audioBuffer: null,
   audioContext: "",
   audioBufferError : "",
-  showWaveform : true,
+  showWaveform : false,
 };
 
 export default function player_state(state = initialState_A, action = {}) {
@@ -40,7 +40,12 @@ export default function player_state(state = initialState_A, action = {}) {
         audioContext: action.data.audioContext,
     
       };  
+      case typeP.SHOW_AUDIO_WAVEFORM_SUCCESS: // When a Login success action has been dispatched
+      return { // See more on actions/authenticate.js on line 19 - 38
+        ...state,
+        showWaveform: action.data.showWaveform,
         
+      };   
     case typeP.LOAD_AUDIO_BUFFER_FAILED: 
       return { 
         ...state,
