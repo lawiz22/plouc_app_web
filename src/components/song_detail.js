@@ -511,7 +511,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 4,
     borderColor: COLOR.SONG,
-    marginLeft: 70,
+    //marginLeft: 70,
     width: imageSize-400,
     height: imageSize-400,
   },
