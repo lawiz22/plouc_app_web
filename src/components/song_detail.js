@@ -370,7 +370,7 @@ getSongreply(songId) {
                                       width: 3
                                     }}
                                     // Optionally handle user manually changing position (0 - 1)
-                                    onPositionChange={pos => console.log(pos)}
+                                    onPositionChange={pos => this.seek(pos*duration)}
                                     // Wave plot type (line or bar)
                                     plot='line'
                                     // Marker position on waveform (0 - 1)
