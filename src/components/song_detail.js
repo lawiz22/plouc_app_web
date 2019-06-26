@@ -355,13 +355,13 @@ getSongreply(songId) {
     const { url, playing, controls, light, volume, muted, loop, played, playedSeconds, loaded, duration, playbackRate, pip } = this.state
     
     return (
-         <View style={{  marginTop: 15 , padding : 15}} >
+         <View style={{  marginTop: 8 , padding : 2, marginLeft : +18}} >
                              
                                   <Waveform
                                     // Audio buffer
                                     buffer={this.props.player_state.audioBuffer}
                                     // waveform height
-                                    height={125}
+                                    height={65}
                                     animate= {false}
                                     markerStyle={{
                                       // Position marker color
@@ -389,15 +389,14 @@ getSongreply(songId) {
                                       pointWidth: 3
                                     }}
                                     // waveform width
-                                    width={350}
+                                    width={315}
                                     
                                   />
                                   {this.props.player_state.requestingAudioBuffer? <Image 
-                                      style={{ borderRadius: 100 ,backgroundColor: '#333' , opacity : 0.8, position:'absolute', left : + 150,top: + 40, padding : 2, height: 80, width : 80, tintColor : COLOR.ALBUM }}
+                                      style={{ borderRadius: 100 ,backgroundColor: '#333' , opacity : 0.8, position:'absolute', left : + 127 ,top: + 2, padding : 2, height: 60, width : 60, tintColor : COLOR.ALBUM }}
                                       source={require('../images/live.svg')}> 
                                   </Image>  : null}
-                                   {this.props.player_state.requestingAudioBuffer? <Text style={{ color : COLOR.POST}}> !!!                   COMPUTING WAVEFORM                   !!! </Text>
-                                   : null}
+                                  
                                     </View>
       );
     }
@@ -436,7 +435,7 @@ getSongreply(songId) {
                             alignItems: 'flex-start', backgroundColor: 'rgb(4,4,4)'
                         }} >
                   
-                  <ScrollView style={ { padding: 10 }}>
+                  <ScrollView style={ { padding: 5 }}>
                         <View style={styles.container} >
                               <Image source = {{ uri: `${settings.API_ROOT}${this.props.usersongs_status.songDetail.song_image}`}} style={styles.image}  />          
                               <TrackDetails title={ this.props.usersongs_status.songDetail.song_title } artist={ getAlbumArtist(this.props.usersongs_status.songDetail.album, albums) } />
@@ -500,7 +499,8 @@ getSongreply(songId) {
 
 
 const { width, height } = Dimensions.get('window');
-const imageSize = height - 200;
+const imageSizeH = height ;
+const imageSizeW = width ;
 const styles = StyleSheet.create({
   container: {
     flex : 1,
@@ -511,9 +511,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 4,
     borderColor: COLOR.SONG,
-    //marginLeft: 70,
-    width: imageSize-400,
-    height: imageSize-400,
+    alignItems: 'center',
+    justifyContent : 'space-evenly',
+    // marginLeft : imageSize-620,
+    width: imageSizeW-815,
+    height: imageSizeW-815,
   },
   logo: {
     //width: 480,
