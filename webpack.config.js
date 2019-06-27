@@ -67,7 +67,7 @@ const vectorIcon = {
 }
 
 const scssLoader = {
-  test: /\.scss/,
+  test: /\.(scss|css)$/,
   loaders: [
       'style-loader', 'css-loader', 'sass-loader'
   ]
