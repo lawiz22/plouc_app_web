@@ -8,6 +8,7 @@ import { bindActionCreators } from "redux";
 import * as authActions from "../../actions/authenticate";
 import { Card, Icon } from 'semantic-ui-react'
 import { Button as ButNEW, Segment } from 'semantic-ui-react'
+import { Header } from 'semantic-ui-react'
 
 
 import { connect } from "react-redux";
@@ -32,15 +33,17 @@ class HeaderProfile extends Component {
     return (
       <View style={styles.container}>
       
-      <Appbar.Header theme={{ colors: { primary: COLOR.PROFILE }}} >
+      <Appbar.Header theme={{ colors: { primary: COLOR.PROFILE }}} style = {{ width : 300 , justifyContent : 'space-evenly'}} >
               
                {this.props.activeUser? <ButNEW circular icon='settings' />: null }
-            
-                <Appbar.Content
-                title="PROFILE"
-                subtitle=""
-                style ={{ alignItems: 'center' }} 
-                />                
+
+               
+               <Segment color='grey' textAlign='center' tertiary>
+               <Header as='h3' textAlign='center'>
+                   <Header.Content>PROFILE</Header.Content>
+               </Header>
+               </Segment>
+                               
                 <Appbar.Action icon="mail"  />
             </Appbar.Header>  
                     
@@ -52,9 +55,10 @@ class HeaderProfile extends Component {
 const styles = StyleSheet.create({
   container: {
      //flex: 1,
-     //flexDirection: 'row',
-     //alignItems: 'stretch',
-     //justifyContent: 'center',
+     
+     flexDirection: 'row',
+     alignItems: 'stretch',
+     justifyContent: 'center',
     // alignItems: 'stretch',
     //justifyContent: 'center',
     // paddingTop: 20,
@@ -71,7 +75,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     width: 100,
     height: 100,
-  },
+  }
 });
 
 

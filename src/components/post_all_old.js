@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { Animated, View, Image as Img, StyleSheet, TouchableWithoutFeedback, Text, ScrollView, FlatList } from 'react-native';
+import { Animated, View, Image, StyleSheet, TouchableWithoutFeedback, Text, ScrollView, FlatList } from 'react-native';
 import { Avatar, Card, Paragraph, Badge, Appbar, Title, Button as ButPaper, List, IconButton} from 'react-native-paper';
 // import { Avatar } from 'react-native-elements';
-
-import { Button, Icon, Image, Item, Label } from 'semantic-ui-react'
 
 import Styles, { COLOR } from "../config/styles";
 import { bindActionCreators } from "redux";
@@ -17,9 +15,6 @@ import settings from '../config/settings';
 
 import {hashHistory} from 'react-router'
 import HeaderPostAll from '../components/HeaderPostAll'
-
-import {formatDate} from '../utils/general';
-
 
 class PostAll extends Component {
 
@@ -183,32 +178,53 @@ class PostAll extends Component {
               ItemSeparatorComponent = {this.FlatListItemSeparator}
               
               renderItem={({item}) =>
-              <View style={{flex:1, flexDirection: 'row', padding : 5 ,
+              <TouchableWithoutFeedback onPress={ () => this.set_postDetail(item)}>        
+                <View style={{flex:1, flexDirection: 'row',
                  borderColor: this.page.postDetail.id === item.id?COLOR.POST:'white', borderWidth: 4 }}>
-                <Item.Group divided>
-                  <Item >
-                    <Item.Image size='tiny' src={`${settings.API_ROOT}${item.image}`} />
-
-                    <Item.Content verticalAlign ='middle'>
-                      <Item.Header as='a' onClick={ () => this.set_postDetail(item)} >{item.title}</Item.Header>
-                      <Item.Meta>
-                        <span className='cinema'>Par : {item.user.first_name} {item.user.last_name}</span>
-                      </Item.Meta>
+                <div className="votes">
+                <a className="up-arrow" >
+                {(this.usersVoteValue(item.id) === 1)? <IconButton
+                                                      icon="arrow-upward"
+                                                      color={COLOR.POST}
+                                                      size={20}
+                                                      onPress={() => console.log('Pressed')}
+                                                    /> : 
+                                                      <IconButton
+                                                      icon="arrow-upward"
+                                                      color={COLOR.GRAY}
+                                                      size={20}
+                                                      onPress={() => console.log('Pressed')}
+                                                    />  }
+                </a>
+                <div className={`score `}>
+                    
+                    <Text size={20} style={{ position: 'absolute', top: 33, left: 23, fontWeight: 'bold' }}> {this.getVoteTally(item.id)} </Text>
+                </div>
+                <a className="down-arrow" >
+                {(this.usersVoteValue(item.id) === -1)? <IconButton
+                                                      icon="arrow-downward"
+                                                      color={COLOR.SONG}
+                                                      size={20}
+                                                      onPress={() => console.log('Pressed')}
+                                                    /> : 
+                                                      <IconButton
+                                                      icon="arrow-downward"
+                                                      color={COLOR.GRAY}
+                                                      size={20}
+                                                      onPress={() => console.log('Pressed')}
+                                                    />  }   
+                </a>
+                </div>
+                    <Image source = {{ uri: `${settings.API_ROOT}${item.image}` }} style={styles.imageView}  />
+                    <View style={{flex:1, flexDirection: 'column'}}>
+                      <Text style={styles.textView} >{item.title}</Text>
+                      <Text>{' '}</Text>
                       
-                      <Item.Extra>
-                        
-                        <Label icon='globe' size='small' content={ item.created_date} />
-                      </Item.Extra>
-                      <Item.Extra as='a'>
-                        {(this.usersVoteValue(item.id) === 1)? <Icon color='green' name='arrow up' onClick={() => console.log('Pressed FIOU')}/> :<Icon color='grey' name='arrow up'/>}
-                        <a>{this.getVoteTally(item.id)} </a>
-                        {(this.usersVoteValue(item.id) === -1)? <Icon color='red' name='arrow down' onClick={() => console.log('Pressed FIOU')}/> :<Icon color='grey' name='arrow down'/>}
-                      </Item.Extra>
-                    </Item.Content>
-                  </Item>
-                </Item.Group>        
-                
-                </View>
+                      <Text style={styles.textView2}> {item.user.first_name} {item.user.last_name}</Text>
+                      <Text style={styles.textView2}> {item.created_date} </Text>
+                    </View>
+                  </View>
+                  </TouchableWithoutFeedback>
                              }
               keyExtractor={(item, index) => index.toString()}
               />
@@ -220,7 +236,30 @@ class PostAll extends Component {
     // if (postList.length === 0) return null;
     return null;
 }    
+    renderPostDetails(item) {
+      console.log("YO ESTI")    
+      return (
+        
+      // if (this.props.userposts_status.postDetail !== null) {
+        
+        <Card style={[Styles.container, { padding: 0 }]} >
+          <Card.Content>
+              <Title >{item.title}</Title>
+              
+          </Card.Content>
+          <Card.Cover source={{ uri: `${settings.API_ROOT}${item.image}` }} style={{
+             borderRadius: 10,
+             borderColor: (this.props.userposts_status.postDetail.id ==! null)?this.props.userposts_status.postDetail.id === item.id ? 'red': COLOR.POST : null ,
+             }}  />      
+          <Paragraph >{item.body}</Paragraph>    
+        </Card>
+      
+      //} 
+
+    // if (postList.length === 0) return null;
+    )
     
+    }  
 
   render() {
     const {activeUser} = this.props;
