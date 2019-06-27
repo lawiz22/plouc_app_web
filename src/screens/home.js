@@ -23,7 +23,7 @@ import  AlbumDetail  from '../components/album_detail'
 import  SongAll  from '../components/song_all'
 import  SongDetail  from '../components/song_detail'
 import ReactPlayer from 'react-player';
-
+import 'semantic-ui-css/semantic.min.css'
 
 import Navigation from '../components/Navigation'
 
@@ -46,7 +46,7 @@ class Home extends Component {
            
             
             <View style={styles.container}> 
-              
+               
               {this.props.activeUser&&this.props.state.showProfilefront? <Profile/> : null }
               {this.props.userposts_status.showPostfront? <PostAll/> : null }
               {this.props.userposts_status.showDetailview? <PostDetail/> : null }  

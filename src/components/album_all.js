@@ -93,7 +93,7 @@ class AlbumAll extends Component {
         
         console.log(item)
         this.props.albums.store_album_detail(item)
-
+        
         this.props.albums.getAlbum(item.id)
         this.props.albums.getAlbum_song_list(item.id)
         // this.props.songs.getSongList(item.id)

@@ -6,6 +6,8 @@ import { DefaultTheme, Appbar, Title, Badge, Button as ButPaper } from 'react-na
 import Styles, { COLOR } from "../../config/styles";
 import { bindActionCreators } from "redux";
 import * as authActions from "../../actions/authenticate";
+import { Card, Icon } from 'semantic-ui-react'
+import { Button as ButNEW, Segment } from 'semantic-ui-react'
 
 
 import { connect } from "react-redux";
@@ -32,7 +34,7 @@ class HeaderProfile extends Component {
       
       <Appbar.Header theme={{ colors: { primary: COLOR.PROFILE }}} >
               
-               {this.props.activeUser? <Appbar.Action icon="settings" />: null }
+               {this.props.activeUser? <ButNEW circular icon='settings' />: null }
             
                 <Appbar.Content
                 title="PROFILE"

@@ -1,14 +1,22 @@
 const path = require('path');
 const paths = require('./paths');
+const fs = require('fs');
 
 //let API_HOST = 'localhost:8084';
 let API_HOST = 'plouc.live';
 
-const webpack = require('webpack');
 const rootDirectory = path.resolve(__dirname, '../');
+
+function resolve(...paths) {
+  return fs.realpathSync(path.join(__dirname, ...paths));
+}
+
+
+
+const webpack = require('webpack');
+
 const babelLoaderConfiguration = {
 
-  
   test: /\.(js|jsx)$/,
   
   use: {
@@ -18,8 +26,6 @@ const babelLoaderConfiguration = {
     },
   
   },
-
-  
   
   // Add every directory that needs to be compiled by Babel during the build
   include: [
@@ -30,7 +36,8 @@ const babelLoaderConfiguration = {
     path.resolve(rootDirectory, 'node_modules/react-native-dismiss-keyboard'),
     path.resolve(rootDirectory, 'node_modules/react-native-safe-area-view'),
     path.resolve(rootDirectory, 'node_modules/react-native-tab-view'),
-    path.resolve(rootDirectory, 'node_modules/react-native-gesture-handler')
+    path.resolve(rootDirectory, 'node_modules/react-native-gesture-handler'),
+    
   ]
 };
 
@@ -46,9 +53,10 @@ const babelLoaderElement = {
 
       // The configration for compilation
       presets: [
-        ['@babel/preset-env', { useBuiltIns: 'usage' }],
+        ['@babel/preset-env'],
         '@babel/preset-react',
         '@babel/preset-flow',
+        
       ],
       plugins: [
         '@babel/plugin-proposal-class-properties',
@@ -60,8 +68,12 @@ const babelLoaderElement = {
 
 const babelLoaderLoad = {
   test: /\.(jpg|gif|png|woff|woff2|eot|ttf|svg)$/,
+ 
   loader: 'file-loader',
 }
+
+
+
 
 const vectorIcon = {
   test: /\.ttf$/,
@@ -70,11 +82,12 @@ const vectorIcon = {
 }
 
 const scssLoader = {
-  test: /\.scss/,
+  test: /\.(scss|css)$/,
   loaders: [
       'style-loader', 'css-loader', 'sass-loader'
   ]
 }
+
 
 
 module.exports = {
@@ -82,9 +95,16 @@ module.exports = {
     contentBase: path.join(__dirname, 'web', 'dist'),
     port: 9000,
   },
-  entry: path.join(__dirname, 'src', 'Web.js'),
+  entry: ['babel-polyfill', './src/Web.js'],
+ // entry: path.join(__dirname, 'src', 'Web.js'),
   module: {
-    rules: [babelLoaderConfiguration,babelLoaderElement,babelLoaderLoad,scssLoader,vectorIcon]
+    rules: [babelLoaderConfiguration,
+            babelLoaderElement,
+            babelLoaderLoad,
+            scssLoader,
+            vectorIcon,
+            
+            ]
       
     
   },

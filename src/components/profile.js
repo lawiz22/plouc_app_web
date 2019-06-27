@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Animated, View, Image, StyleSheet, PanResponder, Text } from 'react-native';
 import { DefaultTheme, Appbar, Title, Badge, Button as ButPaper } from 'react-native-paper';
 // import { Avatar } from 'react-native-elements';
+import 'semantic-ui-css/semantic.min.css'
+import { Button as ButNEW, Segment } from 'semantic-ui-react'
+import { Card, Icon } from 'semantic-ui-react'
+
 
 import Styles, { COLOR } from "../config/styles";
 import { bindActionCreators } from "redux";
@@ -19,6 +23,12 @@ class Profile extends Component {
 
   render() {
     const {activeUser} = this.props;
+    const extra = (
+      <a>
+        <Icon name='user' />
+        4 Friends
+      </a>
+    )
     return (
       
 
@@ -31,7 +41,8 @@ class Profile extends Component {
       <View style={{
                             
                            //  height: 122,
-                            width: 250,
+                            flexDirection : 'column',
+                            width: 300,
                             borderRightColor:  COLOR.PROFILE,
                             borderRightWidth: 4,
                             borderLeftColor:  COLOR.PROFILE,
@@ -40,67 +51,48 @@ class Profile extends Component {
                             borderTopWidth: 20,
                             borderRadius: 30,
                             marginTop: -18,
-                            marginRight: 0,
+                            //marginRight: 0,
 
                             
-                        }}>{this.props.activeUser? <Image
-                        source={{ uri: `${settings.API_ROOT}${this.props.activeUser.profile.image}` }}
-                        style={{
-                            marginTop: 5,
-                            height: 100,
-                            width: 100,
-                            left : 66,
-                            borderRadius: 10,
-                            alignItems : 'stretch',
-                            justifyContent: 'center', 
-                            borderColor:  COLOR.PROFILE,
-                            borderWidth: 3,
-                        }} /> : null } 
-                        {this.props.activeUser? <Badge style={{ right : 40 , backgroundColor: "green" }} >{`${this.props.activeUser.role || "Plouc"}` }</Badge>: null}    
-        {this.props.activeUser? <Title> {`Salut ${this.props.activeUser.first_name} ${this.props.activeUser.last_name}`}</Title>: null }   
+                        }}>
 
+                       {this.props.activeUser? <Card
+                            image={`${settings.API_ROOT}${this.props.activeUser.profile.image}`}
+                            header={`${this.props.activeUser.first_name} ${this.props.activeUser.last_name}`}
+                            meta={`${this.props.activeUser.role || "Plouc"}` }
+                            description='Description possible de la personne mentionné ci haut'
+                            extra={extra}
+                        /> : null } 
+ 
+                          
       <View style={{
                             
                             // height: 122,
-                            marginTop: 5,
+                            //marginTop: 5,
                             marginBottom: -1,
-                            
+                            flexDirection : 'row',
                             // marginRight: 10,
-                            // width: 248,
+                            //width: ,
                             alignItems : 'center',
                             justifyContent: 'center',
                             borderBottomColor:  COLOR.PROFILE,
                             borderBottomWidth: 20,
-                            borderTopColor:  COLOR.PROFILE,
-                            borderTopWidth: 8,
+                            // borderTopColor:  COLOR.PROFILE,
+                            //borderTopWidth: 8,
                             borderRadius: 30,
 
                             
                             
                         }}> 
-                 
-            <Text>{' '}</Text>
-      {this.props.activeUser?<ButPaper icon="content-copy" mode="outlined" raised theme={{ colors: {
-                            ...DefaultTheme.colors,primary: COLOR.PROFILE } }} color = {COLOR.LIGHT_GRAY} style = {{backgroundColor : COLOR.PROFILE, borderRadius: 10 }} onPress={() => console.log('Pressed')}>
-                            {`Posts ${this.props.activeUser.first_name} `}
-                        </ButPaper>: null}
-      <Text>{' '}</Text>
-      {this.props.activeUser?<ButPaper icon="people" mode="outlined"  raised theme={{ colors: {
-                            ...DefaultTheme.colors,primary: COLOR.PROFILE } }} color = {COLOR.LIGHT_GRAY} style = {{backgroundColor : COLOR.PROFILE,borderRadius: 10}} onPress={() => console.log('Pressed')}>
-                            {`Artists ${this.props.activeUser.first_name} `}
-                        </ButPaper>: null}      
-      <Text>{' '}</Text>                  
-      {this.props.activeUser?<ButPaper icon="library-music" mode="outlined" raised theme={{ colors: {
-                            ...DefaultTheme.colors,primary: COLOR.PROFILE } }} color = {COLOR.LIGHT_GRAY} style = {{backgroundColor : COLOR.PROFILE,borderRadius: 10}} onPress={() => console.log('Pressed')}>
-                            {`Albums ${this.props.activeUser.first_name} `}
-                        </ButPaper>: null}
-      <Text>{' '}</Text>                        
-      {this.props.activeUser?<ButPaper icon="music-note" mode="outlined"  raised theme={{ colors: {
-                            ...DefaultTheme.colors,primary: COLOR.PROFILE } }} color = {COLOR.LIGHT_GRAY} style = {{backgroundColor : COLOR.PROFILE,borderRadius: 10}} onPress={() => console.log('Pressed')}>
-                            {`Songs ${this.props.activeUser.first_name} `}
-                        </ButPaper>: null}        
-      <Text>{' '}</Text>                
-                
+                                      
+                <ButNEW circular icon='copy' onClick={() => console.log('Pressed POSTS')}/>
+                        <Text>{' '}</Text>
+                        <ButNEW circular icon='users' onClick={() => console.log('Pressed ARTISTS')}/>    
+                        <Text>{' '}</Text>                  
+                        <ButNEW circular icon='outdent' onClick={() => console.log('Pressed ALBUMS')}/> 
+                        <Text>{' '}</Text>                        
+                        <ButNEW circular icon='file audio' onClick={() => console.log('Pressed SONGS')}/>         
+                        <Text>{' '}</Text>
                 
          </View>
         
