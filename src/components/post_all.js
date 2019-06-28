@@ -183,14 +183,15 @@ class PostAll extends Component {
               ItemSeparatorComponent = {this.FlatListItemSeparator}
               
               renderItem={({item}) =>
+              <TouchableWithoutFeedback > 
               <View style={{flex:1, flexDirection: 'row', padding : 5 ,
                  borderColor: this.page.postDetail.id === item.id?COLOR.POST:'white', borderWidth: 4 }}>
                 <Item.Group divided>
                   <Item >
-                    <Item.Image size='tiny' src={`${settings.API_ROOT}${item.image}`} />
+                    <Item.Image size='tiny' src={(item.image !== null)?`${settings.API_ROOT}${item.image}`: require('../images/post_no_image.png')} />
 
                     <Item.Content verticalAlign ='middle'>
-                      <Item.Header as='a' onClick={ () => this.set_postDetail(item)} >{item.title}</Item.Header>
+                      <Item.Header as='h2' onClick={ () => this.set_postDetail(item)}>{item.title} </Item.Header>
                       <Item.Meta>
                         <span className='cinema'>Par : {item.user.first_name} {item.user.last_name}</span>
                       </Item.Meta>
@@ -199,16 +200,27 @@ class PostAll extends Component {
                         
                         <Label icon='globe' size='small' content={ item.created_date} />
                       </Item.Extra>
-                      <Item.Extra as='a'>
-                        {(this.usersVoteValue(item.id) === 1)? <Icon color='green' name='arrow up' onClick={() => console.log('Pressed FIOU')}/> :<Icon color='grey' name='arrow up'/>}
+                      <Item.Extra>
+                        {(this.usersVoteValue(item.id) === 1)? <Icon color='green' name='arrow up' onClick={() => console.log('Pressed FIOU')}/> :<Icon color='grey' name='arrow up' onClick={() => console.log('Pressed FIOU')}/>}
                         <a>{this.getVoteTally(item.id)} </a>
-                        {(this.usersVoteValue(item.id) === -1)? <Icon color='red' name='arrow down' onClick={() => console.log('Pressed FIOU')}/> :<Icon color='grey' name='arrow down'/>}
+                        {(this.usersVoteValue(item.id) === -1)? <Icon color='red' name='arrow down' onClick={() => console.log('Pressed FIOU en BAS')}/> :<Icon color='grey' name='arrow down' onClick={() => console.log('Pressed FIOU en BAS')}/>}
+                      <Button size="mini" as='div' labelPosition='right'>
+                            <Button icon>
+                              <Icon name='comments' />
+                              
+                            </Button>
+                            <Label size="mini" as='a' basic pointing='left'>
+                            {`${item.post_reply_count}`}
+                            </Label>
+                        </Button>  
                       </Item.Extra>
+                      
                     </Item.Content>
                   </Item>
                 </Item.Group>        
                 
                 </View>
+                </TouchableWithoutFeedback>
                              }
               keyExtractor={(item, index) => index.toString()}
               />
@@ -236,7 +248,7 @@ class PostAll extends Component {
       <View style={{
                             
                             height: 700,
-                            width: 450,
+                            // width: 450,
                             borderRightColor:  COLOR.POST,
                             borderRightWidth: 4,
                             borderLeftColor:  COLOR.POST,

@@ -31,7 +31,7 @@ const Styles = StyleSheet.create({
   containerPostDetail: {
     flex: 1,
     backgroundColor: COLOR.LIGHT_GRAY,
-    padding: 16
+    padding: 26
   },
 
   containerArtistDetail: {

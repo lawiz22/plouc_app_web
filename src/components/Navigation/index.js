@@ -132,7 +132,7 @@ componentWillMount(){
     
     return (
       <View style={styles.container}>
-      <Appbar.Header theme={{ colors: { primary: COLOR.HOME } }} style = {{ width : '100%', alignItems : 'flex-end'}}>
+      <Appbar.Header theme={{ colors: { primary: COLOR.HOME } }} style = {{ }}>
                {!this.props.activeUser? <Appbar.Action icon="menu" onPress={() => hashHistory.push('/login')} />: null }
                {this.props.activeUser&&this.page.shotProfileFront? <Appbar.Action icon="face" style ={{ backgroundColor: COLOR.PROFILE , borderRadius: 10 }} onPress={() =>{ this.showProfilefront()}} />: null }
                {this.props.activeUser&&!this.page.shotProfileFront? <Appbar.Action icon="face" onPress={() =>{ this.showProfilefront()}} />: null }
@@ -144,7 +144,7 @@ componentWillMount(){
                 <Appbar.Content
                 title="Home"
                 subtitle="Home is where the heart is..."
-                style ={{ alignItems: 'flex-start' }} 
+                style ={{}} 
                 />
                 
                 
@@ -167,11 +167,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // flexDirection: 'row',
-    // alignItems: 'stretch',
-     justifyContent: 'center',
+     //alignItems: 'stretch',
+    // justifyContent: 'center',
     //// borderWidth: 5,
     ////borderColor: 'blue',
-    width : '100%' ,
+    //width : '100%' ,
     //alignItems: 'flex-start',
     //justifyContent: 'flex-start',
     // paddingTop: 20,

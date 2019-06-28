@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Animated, View, Image, StyleSheet, PanResponder, Text } from 'react-native';
+import { Animated, View, Image, StyleSheet, ScrollView, Text } from 'react-native';
 import { DefaultTheme, Appbar, Title, Badge, Button as ButPaper } from 'react-native-paper';
 // import { Avatar } from 'react-native-elements';
 
@@ -46,7 +46,7 @@ class Home extends Component {
            
             
             <View style={styles.container}> 
-               
+             
               {this.props.activeUser&&this.props.state.showProfilefront? <Profile/> : null }
               {this.props.userposts_status.showPostfront? <PostAll/> : null }
               {this.props.userposts_status.showDetailview? <PostDetail/> : null }  
@@ -56,7 +56,7 @@ class Home extends Component {
               {this.props.useralbums_status.showDetailview? <AlbumDetail/> : null }
               {this.props.usersongs_status.showSongfront? <SongAll/> : null }
               {this.props.usersongs_status.showSongDetailview? <SongDetail/> : null }  
-             
+              
             </View>   
               
               
@@ -72,11 +72,11 @@ class Home extends Component {
 
 const styles = StyleSheet.create({
   container: {
-     flex: 1,
-     flexDirection: 'row',
+    flex: 1,
+    flexDirection: 'row',
      //height : '100%',
-    // alignItems: 'stretch',
-    //justifyContent: 'flex-start',
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
     // alignItems: 'stretch',
     // justifyContent: 'flex-start',
     ////borderWidth: 5,

@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { Animated, View, Image as ImageOld, StyleSheet, TouchableWithoutFeedback, Text, ScrollView, FlatList } from 'react-native';
-import { Avatar, Card as CardOld, Paragraph, Badge, Appbar, Title, Button as ButPaper, List, IconButton} from 'react-native-paper';
+import { Animated, View, Image, StyleSheet, TouchableWithoutFeedback, Text, ScrollView, FlatList } from 'react-native';
+import { Avatar, Card, Paragraph, Badge, Appbar, Title, Button as ButPaper, List, IconButton} from 'react-native-paper';
 // import { Avatar } from 'react-native-elements';
-
-import { Card, Icon , Image, Button, Label, Comment, Header, Modal} from 'semantic-ui-react'
 
 import Styles, { COLOR } from "../config/styles";
 import { bindActionCreators } from "redux";
@@ -114,7 +112,57 @@ getPostreply(postId) {
         this.props.actionsposts.set_post_list(this.page.postListview)
       }
     
-      
+      votepostDetail = () => {
+        return (
+          <View
+            style={{
+             
+              //width: "100%",
+              top: -50,
+              left: -40,
+              width: 45,
+              paddingLeft: -10,
+
+              // backgroundColor: "#777",
+            }}
+          >
+                <div className="votes">
+                <a className="up-arrow" >
+                {(this.usersVoteValue(this.props.userposts_status.postDetail.id) === 1)? <IconButton
+                                                      icon="arrow-upward"
+                                                      color={COLOR.POST}
+                                                      size={20}
+                                                      onPress={() => console.log('Pressed')}
+                                                    /> : 
+                                                      <IconButton
+                                                      icon="arrow-upward"
+                                                      color={COLOR.GRAY}
+                                                      size={20}
+                                                      onPress={() => console.log('Pressed')}
+                                                    />  }
+                </a>
+                <div className={`score `}>
+                    
+                    <Text size={20} style={{ position: 'absolute', top: 33, left: 23, fontWeight: 'bold' }}> {this.getVoteTally(this.props.userposts_status.postDetail.id)} </Text>
+                </div>
+                <a className="down-arrow" >
+                {(this.usersVoteValue(this.props.userposts_status.postDetail.id) === -1)? <IconButton
+                                                      icon="arrow-downward"
+                                                      color={COLOR.SONG}
+                                                      size={20}
+                                                      onPress={() => console.log('Pressed')}
+                                                    /> : 
+                                                      <IconButton
+                                                      icon="arrow-downward"
+                                                      color={COLOR.GRAY}
+                                                      size={20}
+                                                      onPress={() => console.log('Pressed')}
+                                                    />  }   
+                </a>
+                </div>
+         </View>
+        );
+      }
 
 
       renderPostReplySection(postId) {
@@ -136,22 +184,14 @@ getPostreply(postId) {
                 <View style={{flex:1, flexDirection: 'row',
                  borderColor:'white', borderWidth: 4 }}>
                 
-                <Comment.Group size='large'>
-                  
-                    <Comment size='small'>
-                      <Comment.Avatar  src={`${settings.API_ROOT}${getProfileImage(item.user, users)}`} />
-                      <Comment.Content>
-                        <Comment.Author as='a'>{getFullName(item.user, users)}</Comment.Author>
-                        <Comment.Metadata>
-                          <div>{item.modified_date}</div>
-                        </Comment.Metadata>
-                        <Comment.Text>{item.body}</Comment.Text>
-                        <Comment.Actions>
-                          <Comment.Action>Reply</Comment.Action>
-                        </Comment.Actions>
-                      </Comment.Content>
-                    </Comment>
-                  </Comment.Group>
+                    <Image source = {{ uri: `${settings.API_ROOT}${getProfileImage(item.user, users)}` }} style={styles.imageViewReply}  />
+                    <View style={{flex:1, flexDirection: 'column'}}>
+                      <Text style={styles.textView} >{item.body}</Text>
+                      <Text>{' '}</Text>
+                      
+                      <Text style={styles.textView2}> {getFullName(item.user, users)}</Text>
+                      <Text style={styles.textView2}> {item.modified_date} </Text>
+                    </View>
                   </View>
                   </TouchableWithoutFeedback>
                              }
@@ -167,66 +207,38 @@ getPostreply(postId) {
 }     
         
     renderPostDetails() {
-      console.log("YO ESTI post de-trail")   
-      const extra = (
-        <a>
-          <Icon name='user' />
-          16 Friends
-        </a>
-      )
-      
+      console.log("YO ESTI")    
       return (
         
-      
-        <View style={[Styles.containerPostDetail]}>
+      // if (this.props.userposts_status.postDetail !== null) { //  <Text style={[styles.textViewPost, { padding: 0 }]}>{this.props.userposts_status.postDetail.title}</Text> //
         
-        <Card fluid>
+        <Card style={[Styles.containerPostDetail, { padding: 10 }]}>
+          <Card.Content>
+              <Text style={[styles.textViewPostUser, { padding: 0 }]}>{this.props.userposts_status.postDetail.user.first_name} {this.props.userposts_status.postDetail.user.last_name}</Text>
+             
+              <Avatar.Image size={50} style={{ position: 'absolute', top: 5, left: 22, borderColor: COLOR.POST }} source={{ uri: `${settings.API_ROOT}${this.props.userposts_status.postDetail.user.profile.image}` }} />
+          {this.votepostDetail()}
           
-            <Card.Content >
-            <Card.Header as='h1' textAlign='center'>{this.props.userposts_status.postDetail.title}</Card.Header>
-                       
-            <Image size='huge' src={(this.props.userposts_status.postDetail.image !== null)?`${settings.API_ROOT}${this.props.userposts_status.postDetail.image}`: require('../images/post_no_image.png')} bordered />
-  
-            <View style={{ flexDirection : 'row' , padding : 10, alignItems : 'stretch'}}>
-              
-                  <Card.Meta>{' Ajouté le :'} </Card.Meta>
-                  <Label size='small' content={ this.props.userposts_status.postDetail.created_date} />
-                  <Card.Meta>{'  par : '} </Card.Meta>
-                    <Label as='a' size='small' image>
-                          <img src={`${settings.API_ROOT}${this.props.userposts_status.postDetail.user.profile.image}`} />
-                          {this.props.userposts_status.postDetail.user.first_name} {this.props.userposts_status.postDetail.user.last_name}
-                  </Label> 
-                 
-             </View>   
-             <Card.Description as='h3'>
-                  {this.props.userposts_status.postDetail.body}
-              </Card.Description>
-            </Card.Content>
-            <Card.Content extra>
-            <Button.Group>
-              <Button>
-                {(this.usersVoteValue(this.props.userposts_status.postDetail.id) === 1)? <Icon color='green' name='arrow up' onClick={() => console.log('Pressed FIOU')}/> :<Icon color='grey' name='arrow up' onClick={() => console.log('Pressed FIOU')}/>}
-              </Button>
-              <Button.Or as="a" text={`${this.getVoteTally(this.props.userposts_status.postDetail.id)}`} />
-              <Button>
-              {(this.usersVoteValue(this.props.userposts_status.postDetail.id) === -1)? <Icon color='red' name='arrow down' onClick={() => console.log('Pressed FIOU en BAS')}/> :<Icon color='grey' name='arrow down' onClick={() => console.log('Pressed FIOU en BAS')}/>}
-              </Button>
-            </Button.Group>
-            </Card.Content>
-        </Card>
-
-          <View style = {{ marginLeft: 410 , borderRadius : 6, borderColor : 'white' , borderWidth : 2 }}>
-          <Button size="mini" as='div' labelPosition='right'>
-                            <Button icon>
-                              <Icon name='comments' />
-                            </Button>
-                            <Label size="mini" as='a' basic pointing='left'>
-                                {`${this.props.userposts_status.postDetail.post_reply_count}`}
-                            </Label>
-                        </Button>  
+          <Text style={[styles.textViewPost, { padding: 0 }]}>{this.props.userposts_status.postDetail.title}</Text>
+          <Image style={styles.logo}
+                              source={require('../images/star.png')}
+                            > 
+          </Image>
+          </Card.Content>
+          
+          <Card.Cover source={{ uri: `${settings.API_ROOT}${this.props.userposts_status.postDetail.image}` }} style={[styles.imageView2, { padding: 0 }]}/>      
+          
+          <Text style={styles.textViewPostUserDate}> {this.props.userposts_status.postDetail.created_date} </Text>
+          
+          
+          <View style = {{ paddingRight : 12,paddingBottom : +10 , borderRadius : 6, borderColor : COLOR.GRAY , borderWidth : 2, backgroundColor : 'white'}}>
+              <Text  style={[styles.textViewPostBody, { padding: 0 }]} >{this.props.userposts_status.postDetail.body}</Text>    
+          </View>
+          <View style = {{ borderRadius : 6, borderColor : 'white' , borderWidth : 2 }}>
+              <Text style={styles.textViewPostreplyCount}> {`Comment(s) : ${this.props.userposts_status.postDetail.post_reply_count}`}</Text>
           </View>
           {this.renderPostReplySection(this.props.userposts_status.postDetail.id)}
-        </View>
+        </Card>
       
       //} 
 
@@ -249,7 +261,7 @@ getPostreply(postId) {
       <View style={{
                             
                             height: 700,
-                            width: 550,
+                            //width: 850,
                             borderRightColor:  COLOR.POST,
                             borderRightWidth: 4,
                             borderLeftColor:  COLOR.POST,
@@ -258,13 +270,12 @@ getPostreply(postId) {
                             borderTopWidth: 20,
                             borderRadius: 25,
                             // position: 'absolute', 
-                            marginTop: -18,
-                            //padding : 2, 
+                            marginTop: -18, 
                             //marginRight: 0,
                             borderBottomColor:  COLOR.POST,
                             borderBottomWidth: 40,
                             justifyContent: 'center',
-                            //alignItems: 'flex-start',
+                            alignItems: 'stretch',
                         }} >
             <ScrollView style={[Styles.container, { padding: 0 }]}>            
             
@@ -421,7 +432,7 @@ textViewPostreplyCount: {
  padding:2,
  fontSize: 13,
  //marginTop: -20,
- marginLeft: +300,
+ marginLeft: +390,
  // marginBottom: +15,
  // fontWeight: 'bold',
    fontWeight: 'bold',

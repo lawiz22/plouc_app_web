@@ -85,6 +85,7 @@ class HeaderPostDetail extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    width: 550,
      //flex: 1,
      //flexDirection: 'row',
      //alignItems: 'stretch',
