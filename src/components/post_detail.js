@@ -21,9 +21,12 @@ import {getFullName, getProfileImage} from '../utils/user';
 
 class PostDetail extends Component {
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     
+    this.page = {
+      open: false
+    };
   }
 
   componentDidMount() {
@@ -32,7 +35,7 @@ class PostDetail extends Component {
      // console.log(this.props.state.authSession.data.id);
      // this.props.state.isAuth
      
-     
+     this.page.open = false
      
     // setTimeout(() => {
         
@@ -113,9 +116,28 @@ getPostreply(postId) {
         
         this.props.actionsposts.set_post_list(this.page.postListview)
       }
+
+      set_show_modal = () => {
+        
+        this.page.open = !this.page.open
+        this.setState({ open: true })
+        
+      }
     
       
-
+      download(url) {
+        // fake server request, getting the file url as response
+        setTimeout(() => {
+          const response = {
+            file: url,
+          };
+          // server sent the url to the file!
+          // now, let's download:
+          window.open(response.file);
+          // you could also do:
+          // window.location.href = response.file;
+        }, 100);
+      }
 
       renderPostReplySection(postId) {
         const {users} = this.props;
@@ -177,7 +199,7 @@ getPostreply(postId) {
       
       return (
         
-      
+        
         <View style={[Styles.containerPostDetail]}>
         
         <Card fluid>
@@ -185,7 +207,7 @@ getPostreply(postId) {
             <Card.Content >
             <Card.Header as='h1' textAlign='center'>{this.props.userposts_status.postDetail.title}</Card.Header>
                        
-            <Image size='huge' src={(this.props.userposts_status.postDetail.image !== null)?`${settings.API_ROOT}${this.props.userposts_status.postDetail.image}`: require('../images/post_no_image.png')} bordered />
+            <Image size='huge' src={(this.props.userposts_status.postDetail.image !== null)?`${settings.API_ROOT}${this.props.userposts_status.postDetail.image}`: require('../images/post_no_image.png')} bordered  onClick={() => this.set_show_modal()} />
   
             <View style={{ flexDirection : 'row' , padding : 10, alignItems : 'stretch'}}>
               
@@ -226,8 +248,25 @@ getPostreply(postId) {
                         </Button>  
           </View>
           {this.renderPostReplySection(this.props.userposts_status.postDetail.id)}
-        </View>
-      
+        
+        <Modal dimmer='blurring' open={this.page.open} onClose={() => this.set_show_modal()}>
+                
+                <Modal.Content image>
+                  <Image wrapped size='huge' src={`${settings.API_ROOT}${this.props.userposts_status.postDetail.image}`} />
+                </Modal.Content>
+                <Modal.Actions>
+                  <Button color='black' onClick={() => this.set_show_modal()}>
+                    DONE
+                  </Button>
+                  <Button
+                    positive
+                    icon='save'
+                    labelPosition='right'
+                    content="Sauvegarde"
+                    onClick={() => this.download(`${settings.API_ROOT}${this.props.userposts_status.postDetail.image}`)}
+                  />
+                </Modal.Actions>
+              </Modal></View>
       //} 
 
     // if (postList.length === 0) return null;
