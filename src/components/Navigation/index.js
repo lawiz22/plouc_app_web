@@ -23,7 +23,7 @@ import {hashHistory} from 'react-router'
 class Navigation extends Component {
   constructor(props) {
     super(props);
-
+    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     this.page = {
        shotProfileFront  : this.props.state.showProfilefront,
        shotPostFront : this.props.userposts_status.showPostfront,
@@ -50,11 +50,13 @@ class Navigation extends Component {
     loaded: 0,
     duration: 0,
     playbackRate: 1.0,
-    loop: false
+    loop: false,
+     
   }
   componentDidMount(){
+    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     console.log(this.props.userposts_status.showPostfront)
-
+    this.interval = setInterval(() => this.setState({ time: Date.now()}), 543);
     // this.page.shotProfileFront  = this.props.state.showProfileFront
     // this.page.shotPostFront = this.props.userposts_status.showPostFront
     // this.page.shotArtistFront = this.props.userartists_status.showArtistFront 
@@ -62,8 +64,8 @@ class Navigation extends Component {
     // this.page.shotSongFront = this.props.usersongs_status.showSongFront
 }
 
-componentWillMount(){
-
+componentWillUnMount(){
+  clearInterval(this.interval);
     
 }
 
@@ -147,7 +149,7 @@ componentWillMount(){
                 style ={{}} 
                 />
                 
-                
+                <p style = {{ color : COLOR.POST , fontSize : 10, marginTop : + 35}}> { this.state.time } </p>
                 <Image
                                       source={pasRandomLogo}
                                       style={{ width: 220, height: 50 }}

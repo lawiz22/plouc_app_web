@@ -9,6 +9,10 @@ import Styles, { COLOR } from "../config/styles";
 import { bindActionCreators } from "redux";
 import * as authActions from "../actions/authenticate";
 import * as postActions from "../actions/posts";
+import * as voteCreate from '../actions/votes/post-vote/create';
+import * as voteDelete from '../actions/votes/post-vote/delete';
+import * as voteEdit from '../actions/votes/post-vote/edit';
+
 // import * as postActions from "../actions/posts";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
@@ -101,6 +105,46 @@ getPostreply(postId) {
         if(vote.filter(postVote => postVote.value === 1).length) return 1;
         return null;
       }
+
+      handleDownArrowClick = (postId) => {
+        const {activeUser, dispatch} = this.props;
+        if(!activeUser) return null;
+        if(this.usersVoteValue(postId) === null) {
+          this.props.createvotes.createPostVote({
+                post: postId,
+                value: -1
+            });
+        }
+        if(this.usersVoteValue(postId) === -1) {
+          this.props.deletevotes.deletePostVote(this.usersVote(postId));
+        }
+        if(this.usersVoteValue(postId) === 1) {
+          this.props.editvotes.editPostVote({
+                ...this.usersVote(postId),
+                value: -1
+            });
+        }
+    };
+
+    handleUpArrowClick = (postId) => {
+      const {activeUser, dispatch} = this.props;
+      if(!activeUser) return null;
+      if(this.usersVoteValue(postId) === null) {
+        this.props.createvotes.createPostVote({
+              post: postId,
+              value: 1
+          });
+      }
+      if(this.usersVoteValue(postId) === -1) {
+        this.props.editvotes.editPostVote({
+              ...this.usersVote(postId),
+              value: 1
+          });
+      }
+      if(this.usersVoteValue(postId) === 1) {
+        this.props.deletevotes.deletePostVote(this.usersVote(postId));
+      }
+  };
 
       set_postDetail = (item) => {
         
@@ -227,11 +271,11 @@ getPostreply(postId) {
             <Card.Content extra>
             <Button.Group>
               <Button>
-                {(this.usersVoteValue(this.props.userposts_status.postDetail.id) === 1)? <Icon color='green' name='arrow up' onClick={() => console.log('Pressed FIOU')}/> :<Icon color='grey' name='arrow up' onClick={() => console.log('Pressed FIOU')}/>}
+                {(this.usersVoteValue(this.props.userposts_status.postDetail.id) === 1)? <Icon color='green' name='arrow up' onClick={() => this.handleUpArrowClick(this.props.userposts_status.postDetail.id)}/> :<Icon color='grey' name='arrow up' onClick={() => this.handleUpArrowClick(this.props.userposts_status.postDetail.id)}/>}
               </Button>
               <Button.Or as="a" text={`${this.getVoteTally(this.props.userposts_status.postDetail.id)}`} />
               <Button>
-              {(this.usersVoteValue(this.props.userposts_status.postDetail.id) === -1)? <Icon color='red' name='arrow down' onClick={() => console.log('Pressed FIOU en BAS')}/> :<Icon color='grey' name='arrow down' onClick={() => console.log('Pressed FIOU en BAS')}/>}
+              {(this.usersVoteValue(this.props.userposts_status.postDetail.id) === -1)? <Icon color='red' name='arrow down' onClick={() => this.handleDownArrowClick(this.props.userposts_status.postDetail.id)}/> :<Icon color='grey' name='arrow down' onClick={() => this.handleDownArrowClick(this.props.userposts_status.postDetail.id)}/>}
               </Button>
             </Button.Group>
             </Card.Content>
@@ -521,7 +565,10 @@ export default connect(
            }),
   dispatch => ({
               actions: bindActionCreators(authActions, dispatch),
-              actionsposts: bindActionCreators(postActions, dispatch)
+              actionsposts: bindActionCreators(postActions, dispatch),
+              createvotes: bindActionCreators(voteCreate, dispatch),
+              deletevotes: bindActionCreators(voteDelete, dispatch),
+              editvotes: bindActionCreators(voteEdit, dispatch)
               })
 )(PostDetail);
 
