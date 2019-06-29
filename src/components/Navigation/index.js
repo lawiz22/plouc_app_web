@@ -15,7 +15,7 @@ import { connect } from "react-redux";
 import ReactPlayer from 'react-player';
 import settings from '../../config/settings';
 
-
+import moment from "moment";
 import {hashHistory} from 'react-router'
 
 
@@ -51,12 +51,17 @@ class Navigation extends Component {
     duration: 0,
     playbackRate: 1.0,
     loop: false,
+    currentDate: new Date(),
+    markedDate: moment(new Date()).format("YYYY-MM-DD")
      
   }
   componentDidMount(){
-    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const today = this.state.currentDate;
+    const day = moment(today).format("dddd");
+    const date = moment(today).format('MMMM Do YYYY, h:mm:ss a');
+
     console.log(this.props.userposts_status.showPostfront)
-    this.interval = setInterval(() => this.setState({ time: Date.now()}), 543);
+    this.interval = setInterval(() => this.setState({ time: moment(Date()).format('MMMM Do YYYY, h:mm:ss a')}), 1000);
     // this.page.shotProfileFront  = this.props.state.showProfileFront
     // this.page.shotPostFront = this.props.userposts_status.showPostFront
     // this.page.shotArtistFront = this.props.userartists_status.showArtistFront 

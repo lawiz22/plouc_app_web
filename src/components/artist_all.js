@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Animated, View, Image, StyleSheet, PanResponder, Text, ScrollView, FlatList,TouchableWithoutFeedback } from 'react-native';
+import { Animated, View, StyleSheet, PanResponder, Text, ScrollView, FlatList,TouchableWithoutFeedback } from 'react-native';
 import { DefaultTheme, IconButton, Appbar, Title, Badge, Button as ButPaper } from 'react-native-paper';
 // import { Avatar } from 'react-native-elements';
 
@@ -10,10 +10,12 @@ import * as postActions from "../actions/posts";
 import * as artistActions from "../actions/artists";
 import settings from '../config/settings';
 
+import { Card, Icon , Image , Button, Grid, Label, Header, Modal, Statistic} from 'semantic-ui-react'
+
 import ArtistPreviewCard from '../components/artist/ArtistPreviewCard';
 // import * as postActions from "../actions/posts";
 import { connect } from "react-redux";
-
+import moment from "moment";
 import {hashHistory} from 'react-router'
 import HeaderArtistAll from '../components/HeaderArtistAll'
 import './ArtistAll.scss';
@@ -121,110 +123,80 @@ class ArtistAll extends Component {
         
         this.props.artists.show_artist_detail(this.page.showArtistDetailview)
       }
+
+     
       
 
       renderArtistSection() {
+        
+            
             // console.log(this.props.userartists)
             if (this.props.userartists !== null) {
-            // const posts = JSON.stringify( this.props.userposts );
-            const artistList = Object.values(this.props.userartists)
+
+            
+            const artistList = Object.values(this.props.userartists)  
+            const columns = artistList.map( item => (
+              <Grid.Column key={item.id}>
+                <Image src={ `${settings.API_ROOT}${item.artist_image}`  } />
+              </Grid.Column>
+
+            ))
+            const columnsCard = artistList.map( item => (
+              <Card link raised color={this.page.artistDetail.id === item.id?'blue':null} key={item.id} onClick={ () => this.set_artistDetail(item)}>
+                 <Image size='small' src={ `${settings.API_ROOT}${item.artist_image}`  } wrapped ui={false} />
+                    
+                 <Card.Content>
+                    <Card.Header textAlign='center' > {item.artist}
+                    
+                    </Card.Header>
+                    <Card.Meta as="p" textAlign='center'>
+                      <span className='date'>Joined </span> {moment(item.created_date).format('MMMM Do YYYY')}
+                    </Card.Meta>
+                    <Card.Description textAlign='center'>
+                    <Statistic size='mini'>
+                        <Statistic.Label size='mini'>
+                           Albums
+                        </Statistic.Label>
+                        <Statistic.Value>
+                        <Icon name='selected radio' />
+                           {item.artist_album_count}
+                        </Statistic.Value>
+                      </Statistic>
+
+                      <Statistic size='mini'>
+                        <Statistic.Label size='mini'>
+                           Songs
+                        </Statistic.Label>
+                        <Statistic.Value>
+                        <Icon name='music' />
+                           {item.artist_song_count}
+                        </Statistic.Value>
+                      </Statistic>
+                      
+                    </Card.Description>
+                  </Card.Content>
+                  <Card.Content textAlign='center' extra>
+                   
+                    <Label image>
+                      <img src={ `${settings.API_ROOT}${item.user.profile.image}`  } />
+                      Add by {item.user.first_name}
+                    </Label>
+                    
+                    <Button color={item.is_favorite?'yellow':null} size='mini' circular icon>
+                       <Icon name='star' />
+                    </Button>
+
+                    
+                  </Card.Content>
+
+              </Card>
+               
+            ))
+
+            console.log({columns})
             // console.log(artistList)
             if (artistList.length !== 0) return (
-                <FlatList
-                contentContainerStyle={{
-                flex: 1,
-                flexDirection: 'column',
-                // justifyContent: 'center',
-                // alignItems: 'center',
-                //height: '100%',
-                width: '100%',
-                borderColor : 'white', 
-                borderWidth : 4
-                }}
-                numColumns={3}
-                data={artistList}
-                renderItem={({ item }) => (
-                  <TouchableWithoutFeedback onPress={ () => this.set_artistDetail(item)}> 
-                <View
-                    style={{
-                    marginTop: 10,
-                    width: 170,
-                    height: 190,
-                    alignItems: 'stretch',
-                    paddingRight : -10,
-                    borderColor: this.page.artistDetail.id === item.id?COLOR.ARTIST:'white',
-                    borderWidth: 4 ,
-                    // borderRadius : 10
-                    }}
-                >
-                    <ArtistPreviewCard name={item.artist} imageUrl={ `${settings.API_ROOT}${item.artist_image}`  } />
-                    
-                     <IconButton
-                      icon={require('../images/star2.png')}
-                      color={item.is_favorite?COLOR.ALBUM:COLOR.GRAY}
-                      style= {{ borderRadius: 60, position : 'absolute', right : 18, top : -20}}
-                      size={40}
-                      onPress={() => console.log('Pressed')}
-                      />
-                      <View style={{
-                              //marginTop: 10,
-                              left: 110,
-                              // marginTop : -110,
-                              bottom : 140,
-                              width: 47,
-                              height: '60%',
-                              //paddingRight : 10,
-                              //borderColor : 'blue', 
-                              //borderWidth : 3,
-                              alignItems: 'flex-end',
-                              justifyContent: 'flex-start'
-                              }} >
-                      <div className="votes">
-                          <a className="up-arrow" >
-                          {(this.usersArtVoteValue(item.id) === 1)? <IconButton
-                                                                icon="arrow-upward"
-                                                                color={COLOR.POST}
-                                                                size={25}
-                                                                onPress={() => console.log(this.usersArtVoteValue(item.id))}
-                                                              /> : 
-                                                                <IconButton
-                                                                icon="arrow-upward"
-                                                                color={COLOR.GRAY}
-                                                                size={25}
-                                                                onPress={() => console.log(this.usersArtVoteValue(item.id))}
-                                                              />  }
-                          </a>
-                          <div className={`score `}>
-                              
-                              <Text size={25} style={{ marginLeft: 2, fontWeight: 'bold' }}> {this.getVoteTally(item.id)} </Text>
-                          </div>
-                          <a className="down-arrow" >
-                          {(this.usersArtVoteValue(item.id) === -1)? <IconButton
-                                                                icon="arrow-downward"
-                                                                color={COLOR.SONG}
-                                                                size={25}
-                                                                onPress={() => console.log('Pressed')}
-                                                              /> : 
-                                                                <IconButton
-                                                                icon="arrow-downward"
-                                                                color={COLOR.GRAY}
-                                                                size={25}
-                                                                onPress={() => console.log('Pressed')}
-                                                              />  }   
-                          </a>
-                          </div></View>
-                </View>
-                </TouchableWithoutFeedback>
-                )}
-                keyExtractor={item => item.id.toString()}
-                // ListHeaderComponent={this._renderHeader}
-                //ListFooterComponent={this._renderFooter}
-                // onRefresh={this._handleRefresh}
-                // refreshing={this.state.refreshing}
-                // onEndReached={this._handleLoadMore}
-                // onEndReachedThreshold={0.5}
-                // initialNumToRender={10}
-            />
+              <Card.Group itemsPerRow={3}>{columnsCard}</Card.Group>
                );
             } 
         
@@ -247,7 +219,7 @@ class ArtistAll extends Component {
       <View style={{
                             
                             height: 700,
-                            //width: 850,
+                            width: 650,
                             borderRightColor:  COLOR.ARTIST,
                             borderRightWidth: 4,
                             borderLeftColor:  COLOR.ARTIST,

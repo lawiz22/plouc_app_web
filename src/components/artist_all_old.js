@@ -10,8 +10,6 @@ import * as postActions from "../actions/posts";
 import * as artistActions from "../actions/artists";
 import settings from '../config/settings';
 
-import { Card, Icon , Image as ImgNew, Button, Label, Comment, Header, Modal} from 'semantic-ui-react'
-
 import ArtistPreviewCard from '../components/artist/ArtistPreviewCard';
 // import * as postActions from "../actions/posts";
 import { connect } from "react-redux";
@@ -152,18 +150,69 @@ class ArtistAll extends Component {
                     marginTop: 10,
                     width: 170,
                     height: 190,
-                    //alignItems: 'stretch',
+                    alignItems: 'stretch',
                     paddingRight : -10,
                     borderColor: this.page.artistDetail.id === item.id?COLOR.ARTIST:'white',
                     borderWidth: 4 ,
                     // borderRadius : 10
                     }}
                 >
-                   
-                    <Card.Group itemsPerRow={3} >
-                          <Card raised fluid image={ `${settings.API_ROOT}${item.artist_image}`  } />
-    
-                    </Card.Group>
+                    <ArtistPreviewCard name={item.artist} imageUrl={ `${settings.API_ROOT}${item.artist_image}`  } />
+                    
+                     <IconButton
+                      icon={require('../images/star2.png')}
+                      color={item.is_favorite?COLOR.ALBUM:COLOR.GRAY}
+                      style= {{ borderRadius: 60, position : 'absolute', right : 18, top : -20}}
+                      size={40}
+                      onPress={() => console.log('Pressed')}
+                      />
+                      <View style={{
+                              //marginTop: 10,
+                              left: 110,
+                              // marginTop : -110,
+                              bottom : 140,
+                              width: 47,
+                              height: '60%',
+                              //paddingRight : 10,
+                              //borderColor : 'blue', 
+                              //borderWidth : 3,
+                              alignItems: 'flex-end',
+                              justifyContent: 'flex-start'
+                              }} >
+                      <div className="votes">
+                          <a className="up-arrow" >
+                          {(this.usersArtVoteValue(item.id) === 1)? <IconButton
+                                                                icon="arrow-upward"
+                                                                color={COLOR.POST}
+                                                                size={25}
+                                                                onPress={() => console.log(this.usersArtVoteValue(item.id))}
+                                                              /> : 
+                                                                <IconButton
+                                                                icon="arrow-upward"
+                                                                color={COLOR.GRAY}
+                                                                size={25}
+                                                                onPress={() => console.log(this.usersArtVoteValue(item.id))}
+                                                              />  }
+                          </a>
+                          <div className={`score `}>
+                              
+                              <Text size={25} style={{ marginLeft: 2, fontWeight: 'bold' }}> {this.getVoteTally(item.id)} </Text>
+                          </div>
+                          <a className="down-arrow" >
+                          {(this.usersArtVoteValue(item.id) === -1)? <IconButton
+                                                                icon="arrow-downward"
+                                                                color={COLOR.SONG}
+                                                                size={25}
+                                                                onPress={() => console.log('Pressed')}
+                                                              /> : 
+                                                                <IconButton
+                                                                icon="arrow-downward"
+                                                                color={COLOR.GRAY}
+                                                                size={25}
+                                                                onPress={() => console.log('Pressed')}
+                                                              />  }   
+                          </a>
+                          </div></View>
                 </View>
                 </TouchableWithoutFeedback>
                 )}
