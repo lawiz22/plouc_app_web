@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Animated, View, Image, StyleSheet, ScrollView, Text } from 'react-native';
+import React, { Component, createRef } from 'react';
+import { Animated, View,  StyleSheet, ScrollView, Text } from 'react-native';
 import { DefaultTheme, Appbar, Title, Badge, Button as ButPaper } from 'react-native-paper';
 // import { Avatar } from 'react-native-elements';
 
@@ -24,6 +24,15 @@ import  SongAll  from '../components/song_all'
 import  SongDetail  from '../components/song_detail'
 import ReactPlayer from 'react-player';
 import 'semantic-ui-css/semantic.min.css'
+import {
+Grid,
+Header,
+Image,
+Rail,
+Ref,
+Segment,
+Sticky,
+} from 'semantic-ui-react'
 
 import Navigation from '../components/Navigation'
 
@@ -34,17 +43,20 @@ class Home extends Component {
     super(props);
 
   }
-
+  contextRef = createRef()
   render() {
     const {activeUser} = this.props;
     return (
       <div className="Home">
-      <Navigation/>
-
-        
+      
+      
+      <Sticky context={this.contextRef}>      
+          <Navigation/>
+      
+        </Sticky>
        
-           
-            
+          <Ref innerRef={this.contextRef}> 
+      
             <View style={styles.container}> 
              
               {this.props.activeUser&&this.props.state.showProfilefront? <Profile/> : null }
@@ -60,12 +72,13 @@ class Home extends Component {
             </View>   
               
               
-                     
+         </Ref>            
                   
               
               
          
       </div>
+      
     );
   }
 }

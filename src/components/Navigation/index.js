@@ -15,6 +15,8 @@ import { connect } from "react-redux";
 import ReactPlayer from 'react-player';
 import settings from '../../config/settings';
 
+import { Card, Icon , Button as ButNew, Grid,Image as ImgNew, Label, Header, Modal, Statistic, Menu, Dropdown} from 'semantic-ui-react'
+
 import moment from "moment";
 import {hashHistory} from 'react-router'
 
@@ -36,7 +38,14 @@ class Navigation extends Component {
     console.log(this.props.userposts_status.showPostfront)
     console.log(this.page.shotPostFront)
 
-    
+    this.myLogo = [require('../../images/plouc_home_normal.png'),
+                        require('../../images/plouc_home_normal_2.png'), 
+                        require('../../images/plouc_home_normal_3.png'),
+                        require('../../images/plouc_home_normal_4.png'),
+                        require('../../images/plouc_home_normal_5.png'),
+                      ];
+
+    this.randLogo = this.myLogo[Math.floor(Math.random() * this.myLogo.length)]; 
   }
   state = {
     url: null,
@@ -125,43 +134,34 @@ componentWillUnMount(){
 
   render() {
     const {activeUser} = this.props;
-    const myLogo = [require('../../images/plouc_home_normal.png'),
-                        require('../../images/plouc_home_normal_2.png'), 
-                        require('../../images/plouc_home_normal_3.png'),
-                        require('../../images/plouc_home_normal_4.png'),
-                        require('../../images/plouc_home_normal_5.png'),
-                      ];
-
-    const randLogo = myLogo[Math.floor(Math.random() * myLogo.length)]; 
+    
 
     const pasRandomLogo = require('../../images/plouc_home_normal_5.png')
 
     
     return (
       <View style={styles.container}>
-      <Appbar.Header theme={{ colors: { primary: COLOR.HOME } }} style = {{ }}>
-               {!this.props.activeUser? <Appbar.Action icon="menu" onPress={() => hashHistory.push('/login')} />: null }
-               {this.props.activeUser&&this.page.shotProfileFront? <Appbar.Action icon="face" style ={{ backgroundColor: COLOR.PROFILE , borderRadius: 10 }} onPress={() =>{ this.showProfilefront()}} />: null }
-               {this.props.activeUser&&!this.page.shotProfileFront? <Appbar.Action icon="face" onPress={() =>{ this.showProfilefront()}} />: null }
-               {this.page.shotPostFront? <Appbar.Action icon="content-copy" style ={{ backgroundColor: COLOR.POST , borderRadius: 10 }} onPress={() =>{ this.showPostfront()}} /> : <Appbar.Action icon="content-copy" onPress={() =>{ this.showPostfront()}} /> }
-               {this.page.shotArtistFront? <Appbar.Action icon="people" style ={{ backgroundColor: COLOR.ARTIST , borderRadius: 10 }} onPress={() =>{ this.showArtistfront()}} /> : <Appbar.Action icon="people" onPress={() =>{ this.showArtistfront()}} /> }
-               {this.page.shotAlbumFront? <Appbar.Action icon="library-music" style ={{ backgroundColor: COLOR.ALBUM , borderRadius: 10 }} onPress={() =>{ this.showAlbumfront()}} /> : <Appbar.Action icon="library-music" onPress={() =>{ this.showAlbumfront()}} /> }
-               {this.page.shotSongFront? <Appbar.Action icon="music-note" style ={{ backgroundColor: COLOR.SONG , borderRadius: 10 }} onPress={() =>{ this.showSongfront()}} /> : <Appbar.Action icon="music-note" onPress={() =>{ this.showSongfront()}} /> }
-               
-                <Appbar.Content
-                title="Home"
-                subtitle="Home is where the heart is..."
-                style ={{}} 
-                />
-                
+            <Menu inverted style = {{ backgroundColor: COLOR.HOME }} attached='top'>
+              {!this.props.activeUser? <Icon link size='large' inverted bordered circular  name='sign in' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() => hashHistory.push('/login')} />: null }
+              {this.props.activeUser&&this.page.shotProfileFront? <Icon link size='large' inverted color='grey' circular name='user' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.PROFILE }}  onClick={() =>{ this.showProfilefront()}}/>: null }
+              {this.props.activeUser&&!this.page.shotProfileFront? <Icon link size='large' inverted bordered circular name='user' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.PROFILE }} onClick={() =>{ this.showProfilefront()}}/>: null }
+              
+
+              
+              {this.page.shotPostFront? <Icon link size='large' inverted color= 'olive' circular name='copy' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.POST }}  onClick={() =>{ this.showPostfront()}} /> : <Icon size='large' link inverted bordered circular  name='copy' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() =>{ this.showPostfront()}} /> }
+              {this.page.shotArtistFront? <Icon link size='large' inverted color= 'teal' circular name='users' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.POST }}  onClick={() =>{ this.showArtistfront()}} /> : <Icon size='large' link inverted bordered circular  name='users' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() =>{ this.showArtistfront()}} /> }
+              {this.page.shotAlbumFront? <Icon link size='large' inverted color= 'yellow' circular name='outdent' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.POST }}  onClick={() =>{ this.showAlbumfront()}} /> : <Icon size='large' link inverted bordered circular  name='outdent' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() =>{ this.showAlbumfront()}} /> }
+              {this.page.shotSongFront? <Icon link size='large' inverted color= 'red' circular name='file audio' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.POST }}  onClick={() =>{ this.showSongfront()}} /> : <Icon size='large' link inverted bordered circular  name='file audio' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() =>{ this.showSongfront()}} /> }
+              <Menu.Menu position='right'>
+              
                 <p style = {{ color : COLOR.POST , fontSize : 10, marginTop : + 35}}> { this.state.time } </p>
                 <Image
                                       source={pasRandomLogo}
                                       style={{ width: 220, height: 50 }}
                                     />
-                
-                {this.props.activeUser? <Appbar.Action icon="highlight-off" onPress={() => this.props.actions.logout() } />: null }
-            </Appbar.Header>  
+                {this.props.activeUser? <Icon link size='large' inverted color= 'brown' circular  name='log out' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() => this.props.actions.logout() } />: null }                    
+              </Menu.Menu>
+            </Menu>      
                     
       </View> 
     );

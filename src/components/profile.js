@@ -85,7 +85,7 @@ class Profile extends Component {
                             
                         }}> 
                                       
-                <ButNEW circular icon='copy' onClick={() => console.log('Pressed POSTS')}/>
+                        <ButNEW circular icon='copy' onClick={() => console.log('Pressed POSTS')}/>
                         <Text>{' '}</Text>
                         <ButNEW circular icon='users' onClick={() => console.log('Pressed ARTISTS')}/>    
                         <Text>{' '}</Text>                  
