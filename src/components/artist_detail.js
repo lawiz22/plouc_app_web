@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Animated, View, Image, StyleSheet, TouchableWithoutFeedback, Text, ScrollView, FlatList as FlatListArtist } from 'react-native';
-import { Avatar, Card, Paragraph, Badge, Appbar, Title, Button as ButPaper, List, IconButton} from 'react-native-paper';
+import { Avatar, Card as CardOld, Paragraph, Badge, Appbar, Title, Button as ButPaper, List, IconButton} from 'react-native-paper';
 // import { Avatar } from 'react-native-elements';
+
+import { Card, Icon , Image as ImgNew, Button, Label, Comment, Header, Modal, Statistic} from 'semantic-ui-react';
 
 import Styles, { COLOR } from "../config/styles";
 import { bindActionCreators } from "redux";
@@ -22,7 +24,8 @@ class ArtistDetail extends Component {
   constructor(props) {
     super(props);
     this.page = {
-        
+     
+      open: false,
       albumDetail: [
           {id: 0}
         ]
@@ -35,7 +38,7 @@ class ArtistDetail extends Component {
      // console.log(this.props.state.authSession.data.id);
      // this.props.state.isAuth
      
-     
+     this.page.open = false
      
     // setTimeout(() => {
         
@@ -146,6 +149,13 @@ getArtistreply(artistId) {
         this.page.artistListview = !this.page.artistListview
         
         this.props.actionsartists.set_artist_list(this.page.artistListview)
+      }
+
+      set_show_modal = () => {
+        
+        this.page.open = !this.page.open
+        this.setState({ open: true })
+        
       }
     
       voteartistDetail = () => {
@@ -282,43 +292,69 @@ getArtistreply(artistId) {
 }     
         
     renderArtistDetails() {
-      console.log("YO ESTI DETAIL ALBUM")    
+      console.log("YO ESTI DETAIL ARTIST")    
       return (
         
       // if (this.props.userartists_status.artistDetail !== null) { //  <Text style={[styles.textViewArtist, { padding: 0 }]}>{this.props.userartists_status.artistDetail.title}</Text> //
-        
-        <Card style={[Styles.containerArtistDetail, { padding: 10 }]}>
-          <Card.Content>
-          <Text style={[styles.textViewArtist, { padding: 0 }]}>{this.props.userartists_status.artistDetail.artist}</Text>
+      <Card fluid>
           
-          <IconButton
-                      icon={require('../images/star2.png')}
-                      color={this.props.userartists_status.artistDetail.is_favorite?COLOR.ALBUM:COLOR.GRAY}
-                      style= {{ position : 'absolute', marginLeft : -12, marginTop : -12}}
-                      size={40}
-                      onPress={() => console.log('Pressed')}
-                      />
+            <Card.Content >
+            <Card.Header as='h1' textAlign='center'>{this.props.userartists_status.artistDetail.artist}</Card.Header>
                       
-          </Card.Content>
-          
-          <Card.Cover source={{ uri: `${settings.API_ROOT}${this.props.userartists_status.artistDetail.artist_image}` }} style={[styles.imageView2, { padding: 0 }]}/>      
-          
-          <Text style={styles.textViewArtistUserDate}> Ajouté par : {this.props.userartists_status.artistDetail.user.first_name} le {this.props.userartists_status.artistDetail.created_date} </Text>
-          
-          
-          <View style = {{ paddingRight : 12,paddingBottom : +10 , borderRadius : 6, borderColor : COLOR.GRAY , borderWidth : 2, backgroundColor : 'white'}}>
-              <Text  style={[styles.textViewArtistBody, { padding: 0 }]} >{this.props.userartists_status.artistDetail.created_date}</Text>    
-          </View>
-          
-          <View style = {{ borderRadius : 6, borderColor : 'white' , borderWidth : 2 }}>
-              <Text style={styles.textViewAlbumreplyCount}> {`Album(s) : ${this.donneMoileNbdAlbumMonEsti()}`}</Text>
-          </View>
-          {this.renderArtistAlbumSection()}
-          <View style = {{ borderRadius : 6, borderColor : 'white' , borderWidth : 2 }}>
-              <Text style={styles.textViewArtistreplyCount}> {`Comment(s) : ${this.props.userartists_status.artistDetail.artist_reply_count}`}</Text>
-          </View>
-          
-        </Card>
+            <ImgNew size='huge' src={(this.props.userartists_status.artistDetail.artist_image !== null)?`${settings.API_ROOT}${this.props.userartists_status.artistDetail.artist_image}`: require('../images/post_no_image.png')} bordered  onClick={() => this.set_show_modal()} />
+
+            <View style={{ flexDirection : 'row' , padding : 10, alignItems : 'stretch'}}>
+              
+                  <Card.Meta>{' Ajouté le :'} </Card.Meta>
+                  <Label size='small' content={ this.props.userartists_status.artistDetail.created_date} />
+                  <Card.Meta>{'  par : '} </Card.Meta>
+                    <Label as='a' size='small' image>
+                          <img src={`${settings.API_ROOT}${this.props.userartists_status.artistDetail.user.profile.image}`} />
+                          {this.props.userartists_status.artistDetail.user.first_name} {this.props.userartists_status.artistDetail.user.last_name}
+                  </Label> 
+                
+            </View>   
+            <Card.Description style={{ paddingTop : -20 }} textAlign='center'>
+                    
+                    <Statistic size='mini' >
+                        <Statistic.Label size='mini'>
+                           Albums
+                        </Statistic.Label>
+                        <Statistic.Value>
+                        <Icon name='selected radio' />
+                           {this.props.userartists_status.artistDetail.artist_album_count}
+                        </Statistic.Value>
+                      </Statistic>
+
+                      <Statistic size='mini'>
+                        <Statistic.Label size='mini'>
+                           Songs
+                        </Statistic.Label>
+                        <Statistic.Value>
+                        <Icon name='music' />
+                           {this.props.userartists_status.artistDetail.artist_song_count}
+                        </Statistic.Value>
+                      </Statistic>
+                      
+                    </Card.Description>
+            <Card.Description as='h3'>
+                  {this.props.userartists_status.artistDetail.artist_desc}
+              </Card.Description>
+            </Card.Content>
+            <Card.Content extra>
+            <Button style={{}} size="small" as='div' labelPosition='right' >
+                            <Button icon >
+                              <Icon name='comments' />
+                              
+                            </Button>
+                            <Label size="small" as='a' basic pointing='left'>
+                                {`${this.props.userartists_status.artistDetail.artist_reply_count}`}
+                            </Label>
+            </Button>  
+            </Card.Content>
+            {this.renderArtistAlbumSection()}
+    </Card>
+        
       
       //} {this.renderArtistReplySection(this.props.userartists_status.artistDetail.id)} ${this.donneMoileNbdAlbumMonEsti()}
 
@@ -348,7 +384,7 @@ getArtistreply(artistId) {
       <View style={{
                             
                             height: 700,
-                            //width: 850,
+                            width: 500,
                             borderRightColor:  COLOR.ARTIST,
                             borderRightWidth: 4,
                             borderLeftColor:  COLOR.ARTIST,

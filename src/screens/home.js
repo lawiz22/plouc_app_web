@@ -59,7 +59,7 @@ class Home extends Component {
       
             <View style={styles.container}> 
              
-              {this.props.activeUser&&this.props.state.showProfilefront? <Profile/> : null }
+             
               {this.props.userposts_status.showPostfront? <PostAll/> : null }
               {this.props.userposts_status.showDetailview? <PostDetail/> : null }  
               {this.props.userartists_status.showArtistfront? <ArtistAll/> : null }

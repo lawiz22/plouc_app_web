@@ -15,10 +15,12 @@ import { connect } from "react-redux";
 import ReactPlayer from 'react-player';
 import settings from '../../config/settings';
 
+
+
 import { Card, Icon , Button as ButNew, Grid,Image as ImgNew, Label, Header, Modal, Statistic, Menu, Dropdown} from 'semantic-ui-react'
 
 import moment from "moment";
-import {hashHistory} from 'react-router'
+import {hashHistory, Link} from 'react-router'
 
 
 
@@ -85,8 +87,13 @@ componentWillUnMount(){
 
 
    showProfilefront = () => {
+    const {activeUser} = this.props;
+
         
     this.page.shotProfileFront = !this.page.shotProfileFront
+
+   
+
     
     this.props.actions.show_profile_front(this.page.shotProfileFront)
   }
@@ -143,8 +150,7 @@ componentWillUnMount(){
       <View style={styles.container}>
             <Menu inverted style = {{ backgroundColor: COLOR.HOME }} attached='top'>
               {!this.props.activeUser? <Icon link size='large' inverted bordered circular  name='sign in' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() => hashHistory.push('/login')} />: null }
-              {this.props.activeUser&&this.page.shotProfileFront? <Icon link size='large' inverted color='grey' circular name='user' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.PROFILE }}  onClick={() =>{ this.showProfilefront()}}/>: null }
-              {this.props.activeUser&&!this.page.shotProfileFront? <Icon link size='large' inverted bordered circular name='user' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.PROFILE }} onClick={() =>{ this.showProfilefront()}}/>: null }
+              {this.props.activeUser?<Link className="nav-link" to={`/profile/${activeUser.id}/`}> <Icon link size='large' inverted bordered circular name='user' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.PROFILE }} /> </Link>: null }
               
 
               
@@ -158,6 +164,7 @@ componentWillUnMount(){
                 <Image
                                       source={pasRandomLogo}
                                       style={{ width: 220, height: 50 }}
+                                      onClick={() => hashHistory.push('/')}
                                     />
                 {this.props.activeUser? <Icon link size='large' inverted color= 'brown' circular  name='log out' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() => this.props.actions.logout() } />: null }                    
               </Menu.Menu>
@@ -182,7 +189,7 @@ const styles = StyleSheet.create({
     //alignItems: 'flex-start',
     //justifyContent: 'flex-start',
     // paddingTop: 20,
-    paddingBottom: 10,
+    //paddingBottom: 10,
  
     // borderBottomColor:  COLOR.HOME,
     // borderBottomWidth: 40,

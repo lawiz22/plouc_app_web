@@ -6,7 +6,7 @@ const initialState = {
   clearingAuth: false,
   authSession: null,
   authError: "",
-  showProfilefront: true,
+  showProfilefront: false,
   requestingRestore: true,
   logoutError: ""
 
