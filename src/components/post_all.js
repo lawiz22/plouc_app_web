@@ -18,6 +18,7 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import './PostAll.scss';
 import settings from '../config/settings';
+import moment from "moment";
 
 import {hashHistory} from 'react-router'
 import HeaderPostAll from '../components/HeaderPostAll'
@@ -71,12 +72,7 @@ class PostAll extends Component {
   renderPostList(postList) {
           return postList
               .map(post =>
-                  //<FlatList
-                  //    key={post.id}
-                  //    leftAvatar={{ source: { uri: `${settings.API_ROOT}${post.image}` } }}
-                  //    title={post.title}
-                  //    subtitle={post.user.first_name}
-                  ///>
+                  
                   <List.Item
                       key={post.id}
                       leftAvatar={{ source: { uri: `${settings.API_ROOT}${post.image}` } }}
@@ -242,7 +238,7 @@ class PostAll extends Component {
                       
                       <Item.Extra>
                         
-                        <Label icon='globe' size='small' content={ item.created_date} />
+                        <Label icon='globe' size='small' content={moment(item.created_date).format('YYYY-MM-DD hh:mm')} />
                       </Item.Extra>
                       <Item.Extra>
                         {(this.usersVoteValue(item.id) === 1)? <Icon color='green' name='arrow up' onClick={() => this.handleUpArrowClick(item.id)}/> :<Icon color='grey' name='arrow up' onClick={() => this.handleUpArrowClick(item.id)}/>}

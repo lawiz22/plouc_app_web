@@ -71,13 +71,13 @@ class Navigation extends Component {
     const day = moment(today).format("dddd");
     const date = moment(today).format('MMMM Do YYYY, h:mm:ss a');
 
-    console.log(this.props.userposts_status.showPostfront)
-    this.interval = setInterval(() => this.setState({ time: moment(Date()).format('MMMM Do YYYY, h:mm:ss a')}), 1000);
-    // this.page.shotProfileFront  = this.props.state.showProfileFront
-    // this.page.shotPostFront = this.props.userposts_status.showPostFront
-    // this.page.shotArtistFront = this.props.userartists_status.showArtistFront 
-    // this.page.shotAlbumFront = this.props.useralbums_status.showAlbumFront 
-    // this.page.shotSongFront = this.props.usersongs_status.showSongFront
+    console.log(this.props.state.showProfileFront)
+    //this.interval = setInterval(() => this.setState({ time: moment(Date()).format('MMMM Do YYYY, h:mm:ss a')}), 1000);
+    this.page.shotProfileFront  = this.props.state.showProfileFront
+    this.page.shotPostFront =  this.props.userposts_status.showPostfront,
+    this.page.shotArtistFront = this.props.userartists_status.showArtistFront 
+    this.page.shotAlbumFront = this.props.useralbums_status.showAlbumFront 
+    this.page.shotSongFront = this.props.usersongs_status.showSongFront
 }
 
 componentWillUnMount(){
@@ -98,11 +98,40 @@ componentWillUnMount(){
     this.props.actions.show_profile_front(this.page.shotProfileFront)
   }
 
+
+  crissTouteOff = () => {
+    
+
+        
+    this.page.shotPostFront = true
+    this.page.shotArtistFront = false
+    this.page.shotAlbumFront = false
+    this.page.shotSongFront = false
+    this.page.shotProfileFront = true
+
+    this.props.actions.show_profile_front(this.page.shotProfileFront)
+    this.props.posts.show_post_front(this.page.shotPostFront)
+    this.props.artists.show_artist_front(this.page.shotArtistFront)
+    this.props.albums.show_album_front(this.page.shotAlbumFront)
+    this.props.songs.show_song_front(this.page.shotSongFront)
+
+  }
+
+
   showPostfront = () => {
         
-    this.page.shotPostFront = !this.page.shotPostFront
     
-    this.props.posts.show_post_front(this.page.shotPostFront)
+
+    if(this.page.shotProfileFront){
+        hashHistory.push('/')
+        this.page.shotProfileFront = false
+        this.props.actions.show_profile_front(this.page.shotProfileFront)
+    }else{
+      
+      this.page.shotPostFront = !this.page.shotPostFront
+      this.props.posts.show_post_front(this.page.shotPostFront)
+    }
+    
   }
   
   showArtistfront = () => {
@@ -150,7 +179,7 @@ componentWillUnMount(){
       <View style={styles.container}>
             <Menu inverted style = {{ backgroundColor: COLOR.HOME }} attached='top'>
               {!this.props.activeUser? <Icon link size='large' inverted bordered circular  name='sign in' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() => hashHistory.push('/login')} />: null }
-              {this.props.activeUser?<Link className="nav-link" to={`/profile/${activeUser.id}/`}> <Icon link size='large' inverted bordered circular name='user' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.PROFILE }} /> </Link>: null }
+              {this.props.activeUser?<Link className="nav-link" to="/"> <Icon link size='large' inverted bordered circular name='home' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.PROFILE }} /> </Link>: null }
               
 
               
@@ -166,6 +195,7 @@ componentWillUnMount(){
                                       style={{ width: 220, height: 50 }}
                                       onClick={() => hashHistory.push('/')}
                                     />
+                {this.props.activeUser?<Link className="nav-link" to={`/profile/${activeUser.id}/`}> <Icon link size='large' inverted bordered circular name='user' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.PROFILE }}  onClick={() =>{ this.crissTouteOff()}}  /> </Link>: null }
                 {this.props.activeUser? <Icon link size='large' inverted color= 'brown' circular  name='log out' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() => this.props.actions.logout() } />: null }                    
               </Menu.Menu>
             </Menu>      

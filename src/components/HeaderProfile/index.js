@@ -33,7 +33,7 @@ class HeaderProfile extends Component {
     return (
       <View style={styles.container}>
       
-      <Appbar.Header theme={{ colors: { primary: COLOR.PROFILE }}} style = {{ width : 300 , justifyContent : 'space-evenly'}} >
+      <Appbar.Header theme={{ colors: { primary: COLOR.PROFILE }}} style = {{ width : 295 , justifyContent : 'space-evenly'}} >
               
                {this.props.activeUser? <ButNEW circular icon='settings' />: null }
 
@@ -58,13 +58,16 @@ const styles = StyleSheet.create({
      
      flexDirection: 'row',
      alignItems: 'stretch',
-     justifyContent: 'flex-start',
+     justifyContent: 'center',
+     //width : 290 ,
+
     // alignItems: 'stretch',
     //justifyContent: 'center',
     // paddingTop: 20,
-    paddingBottom: 20,
-    borderRadius: 25,
- 
+    //paddingBottom: 20,
+    //borderRadius: 25,
+    //borderColor:  COLOR.SONG,
+     //borderWidth: 4,
     // borderBottomColor:  COLOR.HOME,
     // borderBottomWidth: 40,
     

@@ -2,6 +2,12 @@ export const getFullName = (userId, users) => {
     const {first_name, last_name} = users[userId];
     return `${first_name} ${last_name}`;
 };
+
+export const getFirstName = (userId, users) => {
+  const {first_name} = users[userId];
+  return `${first_name}`;
+};
+
 export const getAlbum = (albumId, albums) => {
     const {album_title} = albums[albumId];
     return `${album_title}`;

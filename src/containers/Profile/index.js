@@ -70,7 +70,7 @@ class Profile extends Component {
          
       
         </Sticky>
-       <HeaderProfile></HeaderProfile>  
+       
           <Ref innerRef={this.contextRef}> 
       
             <View style={styles.container}> 
@@ -84,19 +84,19 @@ class Profile extends Component {
                            //  height: 122,
                             flexDirection : 'column',
                             width: 300,
-                            borderRightColor:  COLOR.PROFILE,
-                            borderRightWidth: 4,
-                            borderLeftColor:  COLOR.PROFILE,
-                            borderLeftWidth: 4,
-                            borderTopColor:  COLOR.PROFILE,
-                            borderTopWidth: 20,
-                            borderRadius: 30,
-                            marginTop: -18,
+                            //borderRightColor:  COLOR.PROFILE,
+                            //borderRightWidth: 4,
+                            //borderLeftColor:  COLOR.PROFILE,
+                            //borderLeftWidth: 4,
+                            //borderTopColor:  COLOR.PROFILE,
+                            //borderTopWidth: 20,
+                            //borderRadius: 30,
+                            //marginTop: -18,
                             //marginRight: 0,
 
                             
                         }}>
-
+                        
                         <Card
                             image={`${settings.API_ROOT}${this.props.user.profile.image}`}
                             header={`${this.props.user.first_name} ${this.props.user.last_name}`}
@@ -116,17 +116,17 @@ class Profile extends Component {
                             //width: ,
                             alignItems : 'center',
                             justifyContent: 'center',
-                            borderBottomColor:  COLOR.PROFILE,
-                            borderBottomWidth: 20,
+                            //borderBottomColor:  COLOR.PROFILE,
+                            //borderBottomWidth: 20,
                             // borderTopColor:  COLOR.PROFILE,
                             //borderTopWidth: 8,
-                            borderRadius: 30,
+                            //borderRadius: 30,
 
                             
                             
                         }}> 
                                       
-                        <ButNEW circular icon='copy' onClick={() => console.log('Pressed POSTS')}/>
+                        <ButNEW circular icon='copy' onClick={() => hashHistory.push(`/profile/${user.id}/posts`)}/>
                         <Text>{' '}</Text>
                         <ButNEW circular icon='users' onClick={() => console.log('Pressed ARTISTS')}/>    
                         <Text>{' '}</Text>                  
@@ -142,9 +142,9 @@ class Profile extends Component {
                                                   
                         
       </View>
-              
+              {this.props.children}
             </View>   
-              
+            
               
          </Ref>            
                   
