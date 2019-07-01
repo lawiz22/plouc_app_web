@@ -68,8 +68,8 @@ class Profile extends Component {
       <Sticky context={this.contextRef}>      
           <Navigation/>
          
-      
-        </Sticky>
+       </Sticky>
+       
        
           <Ref innerRef={this.contextRef}> 
       
@@ -96,14 +96,14 @@ class Profile extends Component {
 
                             
                         }}>
-                        
+                        <Sticky context={this.contextRef}> 
                         <Card
                             image={`${settings.API_ROOT}${this.props.user.profile.image}`}
                             header={`${this.props.user.first_name} ${this.props.user.last_name}`}
                             meta={`${this.props.user.role || "Plouc"}` }
                             description='Description possible de la personne mentionné ci haut'
                             extra={this.props.activeUser.id===this.props.user.id?extra:null}
-                        /> 
+                        /> </Sticky>
  
                           
       <View style={{

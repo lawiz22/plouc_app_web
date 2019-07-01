@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 import * as postUserAction from '../../actions/posts/post/list';
 import { Animated, View, Image as Img, StyleSheet, TouchableWithoutFeedback, Text, ScrollView, FlatList } from 'react-native';
 import { DefaultTheme, Appbar, Title, Badge, Button as ButPaper } from 'react-native-paper';
 import Styles, { COLOR } from "../../config/styles";
 import { bindActionCreators } from "redux";
+import PropTypes from 'prop-types';
 import * as authActions from "../../actions/authenticate";
 import * as postActions from "../../actions/posts";
 import * as voteCreate from '../../actions/votes/post-vote/create';
@@ -124,7 +126,7 @@ class PostList extends Component {
     renderPostSection() {
 
         const {params: {userId}, posts, users} = this.props;
-        
+        const {post} = this.props;
         const userList = Object.values(this.props.users)
         if (this.props.userposts !== null) {
         // const posts = JSON.stringify( this.props.userposts );
@@ -153,12 +155,15 @@ class PostList extends Component {
               <TouchableWithoutFeedback > 
               <View style={{flex:1, flexDirection: 'row', padding : 5 ,
                  borderColor: 'white', borderWidth: 4 }}>
+                 
                 <Item.Group divided>
                   <Item >
                     <Item.Image size='tiny' src={(item.image !== null)?`${settings.API_ROOT}${item.image}`: require('../../images/post_no_image.png')} />
 
                     <Item.Content verticalAlign ='middle'>
-                      <Item.Header as='h2' onClick={ () => this.set_postDetail(item)}>{item.title} </Item.Header>
+                    <Link to={`/profile/${item.user}/posts/${item.id}`}> 
+                       <Item.Header as='h2'>{item.title} </Item.Header>
+                    </Link>
                       <Item.Meta>
                         <span className='cinema'>Par : {getFullName(item.user, users)} </span>
                       </Item.Meta>
@@ -202,6 +207,7 @@ class PostList extends Component {
 
     render() {
         const {params: {userId}, posts, users} = this.props;
+        const {post} = this.props;
         const namePost = getFirstName(Number(userId), users) + ' post(s)'
         return (
             <div >
