@@ -5,7 +5,7 @@ import AuthenticationRequired from '../HOC/AuthenticationRequired';
 import Profile from "./";
 import PostList from "../PostList";
 import PostDetail from "../PostDetail";
-import UserTime from "../UserTime";
+import UserTime from "./";
 
 
 
