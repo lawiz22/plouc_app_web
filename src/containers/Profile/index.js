@@ -134,6 +134,8 @@ class Profile extends Component {
                         <Text>{' '}</Text>                        
                         <ButNEW circular icon='file audio' onClick={() => console.log('Pressed SONGS')}/>         
                         <Text>{' '}</Text>
+                        <ButNEW circular icon='time' onClick={() => hashHistory.push(`/profile/${user.id}/time`)}/>         
+                        <Text>{' '}</Text>
                 
          </View>
         

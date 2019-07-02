@@ -61,13 +61,16 @@ class App extends Component {
       <Provider store={store}>
          <PaperProvider theme={theme}>
          <React.Fragment>
+         
               {Platform.OS === 'web' ? (
+                
                 <style type="text/css">{`
                   @font-face {
                     font-family: 'MaterialIcons';
                     src: url(${require('react-native-vector-icons/Fonts/MaterialIcons.ttf')}) format('truetype');
                   }
                 `}</style>
+                
               ) : null}
               
               <Router history={hashHistory} routes={routes}/>

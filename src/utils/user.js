@@ -1,3 +1,6 @@
+import moment from "moment";
+
+
 export const getFullName = (userId, users) => {
     const {first_name, last_name} = users[userId];
     return `${first_name} ${last_name}`;
@@ -8,10 +11,28 @@ export const getFirstName = (userId, users) => {
   return `${first_name}`;
 };
 
+export const getBirthDate = (userId, users) => {
+  const {date_birth} = users[userId];
+  
+  return moment( `${date_birth}`).format('YYYY-MM-DD 19:00:ss');
+};
+
 export const getAlbum = (albumId, albums) => {
     const {album_title} = albums[albumId];
     return `${album_title}`;
 };
+
+export const getPostUser= (userId, posts) => {
+  
+  
+  // const postsObj = Object.assign({}, userposts);
+  
+  console.log(userId)
+  console.log(posts)
+  return Object.values(posts)
+      .filter(posts => posts.user === userId)
+    
+}
 
 export const getAlbumArtist = (albumId, albums) => {
     const {artist} = albums[albumId];

@@ -20,7 +20,7 @@ import './PostAll.scss';
 import settings from '../config/settings';
 import moment from "moment";
 
-import {hashHistory} from 'react-router'
+import {hashHistory, Link} from 'react-router'
 import HeaderPostAll from '../components/HeaderPostAll'
 
 import {formatDate} from '../utils/general';
@@ -232,10 +232,12 @@ class PostAll extends Component {
 
                     <Item.Content verticalAlign ='middle'>
                       <Item.Header as='h2' onClick={ () => this.set_postDetail(item)}>{item.title} </Item.Header>
-                      <Item.Meta>
+                      <Link className="user"
+                              to={`/profile/${item.user.id}/posts`}>
+                      <Item.Meta >
                         <span className='cinema'>Par : {item.user.first_name} {item.user.last_name}</span>
                       </Item.Meta>
-                      
+                      </Link>
                       <Item.Extra>
                         
                         <Label icon='globe' size='small' content={moment(item.created_date).format('YYYY-MM-DD hh:mm')} />

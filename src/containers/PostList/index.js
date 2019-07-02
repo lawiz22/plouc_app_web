@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router';
+import {hashHistory, Link} from 'react-router';
 import * as postUserAction from '../../actions/posts/post/list';
 import { Animated, View, Image as Img, StyleSheet, TouchableWithoutFeedback, Text, ScrollView, FlatList } from 'react-native';
 import { DefaultTheme, Appbar, Title, Badge, Button as ButPaper } from 'react-native-paper';
@@ -161,9 +161,9 @@ class PostList extends Component {
                     <Item.Image size='tiny' src={(item.image !== null)?`${settings.API_ROOT}${item.image}`: require('../../images/post_no_image.png')} />
 
                     <Item.Content verticalAlign ='middle'>
-                    <Link to={`/profile/${item.user}/posts/${item.id}`}> 
-                       <Item.Header as='h2'>{item.title} </Item.Header>
-                    </Link>
+                     
+                       <Item.Header as='h2' onClick={() => hashHistory.push(`/profile/${item.user}/posts/${item.id}`)} >{item.title} </Item.Header>
+                   
                       <Item.Meta>
                         <span className='cinema'>Par : {getFullName(item.user, users)} </span>
                       </Item.Meta>

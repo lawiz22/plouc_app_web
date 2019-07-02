@@ -19,19 +19,24 @@ import { connect } from "react-redux";
 
 import settings from '../../config/settings';
 
-import {hashHistory} from 'react-router'
+import {hashHistory, Link} from 'react-router'
 import HeaderPostDetail from '../../components/HeaderPostDetail'
 import {getFullName, getProfileImage, getFirstName} from '../../utils/user';
 
+import ReactLifeTimeline  from 'react-life-timeline';
+
 class PostDetail extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     
     this.page = {
       open: false
     };
+    
   }
+
+
 
   componentDidMount() {
     // console.log(this.props.state.authSession.data.id)
@@ -212,7 +217,10 @@ getPostreply(postId) {
                     <Comment size='small'>
                       <Comment.Avatar  src={`${settings.API_ROOT}${getProfileImage(item.user, users)}`} />
                       <Comment.Content>
+                        <Link className="user"
+                              to={`/profile/${item.user}/posts`}>
                         <Comment.Author as='a'>{getFullName(item.user, users)}</Comment.Author>
+                        </Link>
                         <Comment.Metadata>
                           <div>{item.modified_date}</div>
                         </Comment.Metadata>
@@ -344,7 +352,7 @@ getPostreply(postId) {
                 subtitle={getFirstName(Number(this.props.post.user), users)}
                 style ={{ alignItems: 'center' }} 
                 />
-                <Appbar.Action icon="clear"/> 
+                <Appbar.Action icon="clear" onPress={() => hashHistory.push(`/profile/${this.props.post.user}/posts/`)} /> 
                                
                 
             </Appbar.Header>  
