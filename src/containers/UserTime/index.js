@@ -10,10 +10,12 @@ import PropTypes from 'prop-types';
 import * as authActions from "../../actions/authenticate";
 import * as postActions from "../../actions/posts";
 import * as artistActions from "../../actions/artists";
+import * as albumActions from "../../actions/albums";
+import * as songActions from "../../actions/songs";
 import * as voteCreate from '../../actions/votes/post-vote/create';
 import * as voteDelete from '../../actions/votes/post-vote/delete';
 import * as voteEdit from '../../actions/votes/post-vote/edit';
-import {getFirstName, getFullName, getPostUser, getArtistUser} from '../../utils/user';
+import {getFirstName, getFullName, getPostUser, getArtistUser,getAlbumUser,getSongUser} from '../../utils/user';
 import {getUser} from '../../actions/accounts/user/get';
 import HeaderUserPostAll from '../../components/HeaderUserPostAll'
 import { Button, Icon, Image, Item, Label } from 'semantic-ui-react'
@@ -102,8 +104,9 @@ timePostList(postList) {
   return postList
       .map(post =>
         (this.EVENTS_USER[post.id] = ({
-          date_start: new Date(`${post.created_date}`) ,
-       
+          date_start: new Date(`${post.date_debut}`) ,
+         
+          
           title: post.title,
           color: COLOR.POST 
       }))
@@ -123,13 +126,36 @@ timeArtistList(artistList) {
       );
 }
 
+timeAlbumList(albumList) {
+  return albumList
+      .map(album =>
+        (this.EVENTS_USER[album.id] = ({
+          date_start: new Date(`${album.date_action}`) ,
+          title: album.album_title,
+          color: '#FD691C'
+      }))
+      );
+}
+timeSongList(songList) {
+  return songList
+      .map(song =>
+        (this.EVENTS_USER[song.id] = ({
+          date_start: new Date(`${song.date_action}`) ,
+          title: song.song_title,
+          color: COLOR.SONG
+      }))
+      );
+}
+
  
     componentDidMount() {
         const {dispatch, params: {userId}} = this.props;
         dispatch(getUser(userId));
         this.props.actionsposts.get_user_post()
         this.props.actionsartists.get_artist_list()
-       
+        this.props.actionssongs.get_song_list()
+        this.props.actionssongs.getSongList()
+        this.props.actionsalbums.get_album_list()
         const {posts} = this.props;
         (this.props.postUserAction.getPostList({
             user: userId
@@ -151,9 +177,9 @@ timeArtistList(artistList) {
     add_incremental_event(force_index) {
       let {events_added} = this.state;
       let next_index = force_index == null ? events_added+1 : force_index;
-      if (next_index < this.EVENTS.length) {
+      if (next_index < this.EVENTS_USER.length) {
           this.setState({events_added: next_index}, () => {
-              let timeout_id = window.setTimeout(this.add_incremental_event.bind(this), 1000);
+              let timeout_id = window.setTimeout(this.add_incremental_event.bind(this), 100);
               this.setState({timeout_id: timeout_id});
           });
       }
@@ -278,7 +304,7 @@ timeArtistList(artistList) {
 
 
     render() {
-        const {params: {userId}, posts, users, artists} = this.props;
+        const {params: {userId}, posts, users, artists,albums, songs} = this.props;
         const {post} = this.props;
         const {user} = this.props;
         if(!user) return null;
@@ -292,8 +318,13 @@ timeArtistList(artistList) {
         const postsObj = this.timePostList(getPostUser(Number(userId), posts))
 
         const artistsObj = this.timeArtistList(getArtistUser(Number(userId), artists))
-  
-        const listAll = this.concat( artistsObj,postsObj);
+
+        const albumsObj = this.timeAlbumList(getAlbumUser(Number(userId), albums))
+        const songsObj = this.timeSongList(getSongUser(Number(userId), songs))
+        
+        const listAll = this.concat( artistsObj,postsObj,albumsObj,songsObj);
+        console.log (listAll)
+
         return (
 
           <div className="Home">
@@ -409,6 +440,8 @@ export default connect(
             users: state.users.data,
             posts: state.posts.data,
             artists: state.artists.data,
+            albums: state.albums.data,
+            songs: state.songs.data,
             postVotes: state.postVotes.data,
             user: state.users.data[props.params.userId],
             
@@ -417,6 +450,8 @@ dispatch => ({
             
             actionsposts: bindActionCreators(postActions, dispatch),
             actionsartists: bindActionCreators(artistActions, dispatch),
+            actionsalbums: bindActionCreators(albumActions, dispatch),
+            actionssongs: bindActionCreators(songActions, dispatch),
             createvotes: bindActionCreators(voteCreate, dispatch),
             deletevotes: bindActionCreators(voteDelete, dispatch),
             editvotes: bindActionCreators(voteEdit, dispatch),

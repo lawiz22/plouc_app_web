@@ -46,6 +46,32 @@ export const getArtistUser= (userId, artists) => {
     
 }
 
+export const getAlbumUser= (userId, albums) => {
+  
+  
+  // const postsObj = Object.assign({}, userposts);
+  
+  console.log(userId)
+  console.log(albums)
+  return Object.values(albums)
+      .filter(albums => albums.user === userId)
+    
+}
+
+
+
+export const getSongUser= (userId, songs) => {
+  
+  
+  // const postsObj = Object.assign({}, userposts);
+  
+  console.log(userId)
+  console.log(songs)
+  return Object.values(songs)
+      .filter(songs => songs.user === userId)
+    
+}
+
 export const getAlbumArtist = (albumId, albums) => {
     const {artist} = albums[albumId];
     return `${artist}`;
