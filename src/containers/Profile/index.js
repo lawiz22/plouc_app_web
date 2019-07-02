@@ -114,7 +114,7 @@ class Profile extends Component {
                             header={`${this.props.user.first_name} ${this.props.user.last_name}`}
                             meta={`${this.props.user.role || "Plouc"}` }
                             description='Description possible de la personne mentionné ci haut'
-                            extra={this.props.activeUser.id===this.props.user.id?extra:null}
+                            extra={this.props.activeUser !== null && this.props.activeUser.id===this.props.user.id?extra:null}
                         /> 
  
                           
