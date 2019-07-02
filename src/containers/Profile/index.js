@@ -42,18 +42,29 @@ import Navigation from '../../components/Navigation'
 class Profile extends Component {
   constructor() {
     super();
-
+    this.state = {
+      time: false
+    };
   }
 
   componentDidMount() {
     const {dispatch, params: {userId}} = this.props;
     dispatch(getUser(userId));
+    console.log(this.props.location.pathname) // "?filter=top&origin=im"
+    const res = this.props.location.pathname.substr(-4, this.props.location.pathname.length);
+    console.log(res)
+    if (res == 'time') {
+    this.setState({
+      time: true
+    });
+    }
 }
   contextRef = createRef()
   render() {
     const {activeUser} = this.props;
     const {user, users} = this.props;
     if(!user) return null;
+    const res = this.props.location.pathname.substr(-4, this.props.location.pathname.length);
     
     const extra = (
       <a>
@@ -93,17 +104,18 @@ class Profile extends Component {
                             //borderRadius: 30,
                             //marginTop: -18,
                             //marginRight: 0,
-
+                            backgroundColor : this.state.time?'black':'white'
                             
                         }}>
                         <Sticky context={this.contextRef}> 
                         <Card
+                            color={this.state.time?'black':null}
                             image={`${settings.API_ROOT}${this.props.user.profile.image}`}
                             header={`${this.props.user.first_name} ${this.props.user.last_name}`}
                             meta={`${this.props.user.role || "Plouc"}` }
                             description='Description possible de la personne mentionné ci haut'
                             extra={this.props.activeUser.id===this.props.user.id?extra:null}
-                        /> </Sticky>
+                        /> 
  
                           
       <View style={{
@@ -134,10 +146,10 @@ class Profile extends Component {
                         <Text>{' '}</Text>                        
                         <ButNEW circular icon='file audio' onClick={() => console.log('Pressed SONGS')}/>         
                         <Text>{' '}</Text>
-                        <ButNEW circular icon='time' onClick={() => hashHistory.push(`/profile/${user.id}/time`)}/>         
+                        <ButNEW circular icon='time' onClick={() => hashHistory.push(`/time/${user.id}`)}/>         
                         <Text>{' '}</Text>
                 
-         </View>
+         </View></Sticky>
         
         
       
@@ -171,6 +183,7 @@ const styles = StyleSheet.create({
     ////borderWidth: 5,
     ////borderColor: 'red',
     paddingTop: 0,
+    // backgroundColor : this.state.time?'black':'white',
     paddingBottom: 10,
     borderBottomColor:  COLOR.CHOCO,
     borderBottomWidth: 40,

@@ -9,17 +9,28 @@ import { bindActionCreators } from "redux";
 import PropTypes from 'prop-types';
 import * as authActions from "../../actions/authenticate";
 import * as postActions from "../../actions/posts";
+import * as artistActions from "../../actions/artists";
 import * as voteCreate from '../../actions/votes/post-vote/create';
 import * as voteDelete from '../../actions/votes/post-vote/delete';
 import * as voteEdit from '../../actions/votes/post-vote/edit';
-import {getFirstName, getFullName, getPostUser} from '../../utils/user';
+import {getFirstName, getFullName, getPostUser, getArtistUser} from '../../utils/user';
+import {getUser} from '../../actions/accounts/user/get';
 import HeaderUserPostAll from '../../components/HeaderUserPostAll'
 import { Button, Icon, Image, Item, Label } from 'semantic-ui-react'
+import {
+  Grid,
+  Header,
+  Rail,
+  Ref,
+  Segment,
+  Sticky,
+  } from 'semantic-ui-react'
 import settings from '../../config/settings';
 import moment from "moment";
 import ReactLifeTimeline from '../../lib/ReactLifeTimeline';
 import ReactDOM from 'react-dom';
 import '../../lib/react-life-timeline.css'
+import Navigation from '../../components/Navigation'
 
 
 class UserTime extends Component {
@@ -92,17 +103,33 @@ timePostList(postList) {
       .map(post =>
         (this.EVENTS_USER[post.id] = ({
           date_start: new Date(`${post.created_date}`) ,
-          date_end: new Date(`${post.created_date}`),
+       
           title: post.title,
           color: COLOR.POST 
       }))
       );
 }
 
+timeArtistList(artistList) {
+  return artistList
+      .map(artist =>
+        (this.EVENTS_USER[artist.id] = ({
+          date_start: new Date(`${artist.date_debut}`) ,
+          date_end: new Date(`${artist.date_fin}`),
+          title: artist.artist,
+          ongoing: artist.is_active,
+          color: '#2276FF'
+      }))
+      );
+}
+
  
     componentDidMount() {
+        const {dispatch, params: {userId}} = this.props;
+        dispatch(getUser(userId));
         this.props.actionsposts.get_user_post()
-        const { params: {userId}} = this.props;
+        this.props.actionsartists.get_artist_list()
+       
         const {posts} = this.props;
         (this.props.postUserAction.getPostList({
             user: userId
@@ -124,7 +151,7 @@ timePostList(postList) {
     add_incremental_event(force_index) {
       let {events_added} = this.state;
       let next_index = force_index == null ? events_added+1 : force_index;
-      if (next_index < this.EVENTS_LAWIZ.length) {
+      if (next_index < this.EVENTS.length) {
           this.setState({events_added: next_index}, () => {
               let timeout_id = window.setTimeout(this.add_incremental_event.bind(this), 1000);
               this.setState({timeout_id: timeout_id});
@@ -136,8 +163,8 @@ timePostList(postList) {
     
     return moment( `${date_birth}`).format('YYYY-MM-DD');
   };
-  incremental_events() {
-      return this.EVENTS_LAWIZ.slice(0, this.state.events_added);
+  incremental_events(postsObj) {
+      return postsObj.slice(0, this.state.events_added);
   }
   
   restart_incremental() {
@@ -244,28 +271,50 @@ timePostList(postList) {
     // if (postList.length === 0) return null;
     return null;
 }    
+    concat(...args) {
+        return args.reduce((acc, val) => [...acc, ...val]);
+      }
+
+
 
     render() {
-        const {params: {userId}, posts, users} = this.props;
+        const {params: {userId}, posts, users, artists} = this.props;
         const {post} = this.props;
+        const {user} = this.props;
+        if(!user) return null;
         const namePost = getFirstName(Number(userId), users) + ' Time'
         
         let constance =new Date( this.getBirthDate(Number(userId), users));
 
         //console.log ({posts})
         
-        //console.log (this.timePostList(getPostUser(Number(userId), posts)))
-        //console.log (userId)
-        //console.log (this.EVENTS)
+       
         const postsObj = this.timePostList(getPostUser(Number(userId), posts))
-        //console.log (postsObj)
 
+        const artistsObj = this.timeArtistList(getArtistUser(Number(userId), artists))
+  
+        const listAll = this.concat( artistsObj,postsObj);
         return (
-            <div >
-            
-                <View >
+
+          <div className="Home">
       
-      <Appbar.Header theme={{ colors: { primary: COLOR.POST }}} >
+      
+          <Sticky context={this.contextRef}>      
+              <Navigation/>
+             
+           </Sticky>
+           
+           
+              <Ref innerRef={this.contextRef}> 
+          
+                
+                  <View style={styles.container}> 
+                 
+                  <div >
+            
+                <View style ={{ backgroundColor: 'black' }}>
+      
+                <Appbar.Header theme={{ colors: { primary: COLOR.POST }}} >
                
                
                <Appbar.Action icon="content-copy" />
@@ -276,55 +325,98 @@ timePostList(postList) {
                 style ={{ alignItems: 'center' }} 
                 />
                 <Appbar.Action icon="search"  />
-                
-                
-                
-                               
+        
                 
             </Appbar.Header>  
                     
-      </View>
+      
                
                    
-                   <div>   
-            <h2>{getFirstName(Number(userId), users) + ' Time-week-line'}</h2>
-    
+            <div>   
+            <h3 style={{ color: COLOR.POST }}>{getFirstName(Number(userId), users) + ' Time-week-line'}</h3>
+            
+					   <a href="javascript:void(0)" onClick={this.restart_incremental.bind(this)}>Play Incremental / Restart</a>
+			     	
 				<ReactLifeTimeline
 						subject_name={getFirstName(Number(userId), users)}
             birthday={constance}
 						// birthday={(getBirthDate(Number(userId), users)}
 						// events={this.incremental_events()} />
-            events={postsObj} />
-           <p>
-					<a href="javascript:void(0)" onClick={this.restart_incremental.bind(this)}>Play Incremental / Restart</a>
-				</p>
+            events={this.incremental_events(listAll)} onClick={console.log('Ca Clique en esti')}/>
+            
 				
-        </div>
+           </div>
     
                        
-
+            </View>
 
             </div>
+          
+                            
+          
+                 
+                </View>   
+                
+                  
+             </Ref>            
+                      
+                  
+                  
+             
+          </div>
+
+
+
+
+            
         );
     }
 
 }
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+     //height : '100%',
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
+    // alignItems: 'stretch',
+    // justifyContent: 'flex-start',
+    ////borderWidth: 5,
+    ////borderColor: 'red',
+    paddingTop: 0,
+    // backgroundColor : this.state.time?'black':'white',
+    paddingBottom: 10,
+    borderBottomColor:  COLOR.CHOCO,
+    borderBottomWidth: 40,
+    
+  },
+  image: {
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    width: 100,
+    height: 100,
+  },
+});
 export default connect(
 
-    state => ({
+  (state,props) => ({
             state: state.authenticate,
             userposts_status : state.list_post,
             userposts : state.list_post.postList,
             activeUser: state.activeUser,
             users: state.users.data,
             posts: state.posts.data,
+            artists: state.artists.data,
             postVotes: state.postVotes.data,
+            user: state.users.data[props.params.userId],
             
 }),
 dispatch => ({
             
             actionsposts: bindActionCreators(postActions, dispatch),
+            actionsartists: bindActionCreators(artistActions, dispatch),
             createvotes: bindActionCreators(voteCreate, dispatch),
             deletevotes: bindActionCreators(voteDelete, dispatch),
             editvotes: bindActionCreators(voteEdit, dispatch),

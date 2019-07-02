@@ -19,7 +19,7 @@ import { connect } from "react-redux";
 import './PostAll.scss';
 import settings from '../config/settings';
 
-import {hashHistory} from 'react-router'
+import {hashHistory, Link} from 'react-router'
 import HeaderPostDetail from '../components/HeaderPostDetail'
 import {getFullName, getProfileImage} from '../utils/user';
 
@@ -207,7 +207,10 @@ getPostreply(postId) {
                     <Comment size='small'>
                       <Comment.Avatar  src={`${settings.API_ROOT}${getProfileImage(item.user, users)}`} />
                       <Comment.Content>
-                        <Comment.Author as='a'>{getFullName(item.user, users)}</Comment.Author>
+                        <Link className="user"
+                              to={`/profile/${item.user}/posts`}>
+                        <Comment.Author >{getFullName(item.user, users)}</Comment.Author>
+                        </Link>
                         <Comment.Metadata>
                           <div>{item.modified_date}</div>
                         </Comment.Metadata>
@@ -258,10 +261,13 @@ getPostreply(postId) {
                   <Card.Meta>{' Ajouté le :'} </Card.Meta>
                   <Label size='small' content={ this.props.userposts_status.postDetail.created_date} />
                   <Card.Meta>{'  par : '} </Card.Meta>
-                    <Label as='a' size='small' image>
+                  <Link className="user"
+                              to={`/profile/${this.props.userposts_status.postDetail.user.id}/posts`}> 
+                              <Label size='small' image>
                           <img src={`${settings.API_ROOT}${this.props.userposts_status.postDetail.user.profile.image}`} />
                           {this.props.userposts_status.postDetail.user.first_name} {this.props.userposts_status.postDetail.user.last_name}
-                  </Label> 
+                  </Label>  
+                  </Link>
                  
              </View>   
              <Card.Description as='h3'>

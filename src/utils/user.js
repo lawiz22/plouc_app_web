@@ -28,9 +28,21 @@ export const getPostUser= (userId, posts) => {
   // const postsObj = Object.assign({}, userposts);
   
   console.log(userId)
-  console.log(posts)
+  //console.log(posts)
   return Object.values(posts)
       .filter(posts => posts.user === userId)
+    
+}
+
+export const getArtistUser= (userId, artists) => {
+  
+  
+  // const postsObj = Object.assign({}, userposts);
+  
+  console.log(userId)
+  console.log(artists)
+  return Object.values(artists)
+      .filter(artists => artists.user === userId)
     
 }
 
