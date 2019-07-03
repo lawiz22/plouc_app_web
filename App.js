@@ -8,8 +8,10 @@ import thunk from "redux-thunk";
 import logger from "redux-logger";
 import { Appbar } from 'react-native-paper';
 import {hashHistory, Router} from "react-router";
+import { reducer as formReducer } from "redux-form";
 
 import * as reducers from "./src/reducers";
+import rootReducer from './src/reducers/index';
 import routes from "./src/config/routes";
 
 
@@ -29,15 +31,10 @@ const middleware = [
 ];
 
 const createStoreWithMiddleware = composeWithDevTools(applyMiddleware(...middleware))(createStore);
-const reducer = combineReducers(reducers);
 
-const rootReducer = (state, action) => {
-  if (action.type === LOGOUT_SUCCESS) { // If the user have successfully signed out and ended his/her session
-    state.authenticate = undefined // Reset all state to remove cached data of the previous session
-    state.activeUser = undefined // Reset all state to remove cached data of the previous session
-  }
-  return reducer(state, action)
-}
+
+
+
 const store = createStoreWithMiddleware(rootReducer);
 
 const theme = {

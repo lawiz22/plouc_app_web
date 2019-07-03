@@ -11,6 +11,10 @@ import * as artistActions from "../../actions/artists";
 import * as albumActions from "../../actions/albums";
 import * as songActions from "../../actions/songs";
 import {getUser} from '../../actions/accounts/user/get';
+import {getPostList} from '../../actions/posts/post/list';
+
+import PostForm from '../PostForm/PostForm'
+
 
 import HeaderProfile from '../../components/HeaderProfile'
 
@@ -37,6 +41,8 @@ import { Card, Icon } from 'semantic-ui-react'
 
 import Navigation from '../../components/Navigation'
 
+import './PostList.scss';
+
 
 
 class Profile extends Component {
@@ -46,6 +52,8 @@ class Profile extends Component {
       time: false
     };
   }
+
+
 
   componentDidMount() {
     const {dispatch, params: {userId}} = this.props;
@@ -58,6 +66,22 @@ class Profile extends Component {
       time: true
     });
     }
+    dispatch(getPostList({
+        user: userId
+    }));
+}
+
+
+renderPostFormSection() {
+  const {activeUser, params: {userId}} = this.props;
+  if (!activeUser || activeUser.id !== Number(userId)) return null;
+  return (
+      
+    
+            <PostForm/>
+
+              
+  );
 }
   contextRef = createRef()
   render() {
@@ -84,13 +108,13 @@ class Profile extends Component {
        
           <Ref innerRef={this.contextRef}> 
       
-            <View style={styles.container}> 
+            <View style={styles.container}  > 
               
              
               
       
                         
-      <View style={{
+      <View  style={{
                             
                            //  height: 122,
                             flexDirection : 'column',
@@ -107,7 +131,7 @@ class Profile extends Component {
                             backgroundColor : this.state.time?'black':'white'
                             
                         }}>
-                        <Sticky context={this.contextRef}> 
+                        
                         <Card
                             color={this.state.time?'black':null}
                             image={`${settings.API_ROOT}${this.props.user.profile.image}`}
@@ -149,18 +173,20 @@ class Profile extends Component {
                         <ButNEW circular icon='time' onClick={() => hashHistory.push(`/time/${user.id}`)}/>         
                         <Text>{' '}</Text>
                 
-         </View></Sticky>
-        
+         </View>
         
       
                                                   
                         
       </View>
+              <div className="col-md-10">
               {this.props.children}
-            </View>   
+              </div>
+              {this.renderPostFormSection()}
+      </View>   
             
               
-         </Ref>            
+                   </Ref>  
                   
               
               
