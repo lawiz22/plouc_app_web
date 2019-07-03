@@ -15,7 +15,7 @@ import * as voteDelete from '../../actions/votes/post-vote/delete';
 import * as voteEdit from '../../actions/votes/post-vote/edit';
 import {getFirstName, getFullName} from '../../utils/user';
 import HeaderUserPostAll from '../../components/HeaderUserPostAll'
-import { Button, Icon, Image, Item, Label, Modal , Header} from 'semantic-ui-react'
+import { Button, Icon, Image, Item, Label, Modal , Header, Menu, Input} from 'semantic-ui-react'
 import settings from '../../config/settings';
 import moment from "moment";
 
@@ -253,7 +253,7 @@ class PostList extends Component {
                  borderColor: 'white', borderWidth: 4 }}>
                  <div >
                  {this.props.activeUser !== null && this.props.activeUser.id===this.props.user.id?<Button icon size='mini' floated='left'  onClick={() => this.set_show_modal(item)}>
-                            <Icon name='delete' />
+                            <Icon inverted color='red' name='delete' />
                                             
                 </Button>:null}
                  </div>
@@ -309,30 +309,28 @@ class PostList extends Component {
 }    
 
     render() {
-        const {params: {userId}, posts, users} = this.props;
+        const {params: {userId}, posts, users, user} = this.props;
         const {post} = this.props;
+        const {activeUser} = this.props;
         const namePost = getFirstName(Number(userId), users) + ' post(s)'
         return (
             <div >
                 <View >
       
-      <Appbar.Header theme={{ colors: { primary: COLOR.POST }}} >
-               
-               
-               <Appbar.Action icon="content-copy" />
-            
-                <Appbar.Content
-                title={namePost}
-                subtitle=""
-                style ={{ alignItems: 'center' }} 
-                />
-                <Appbar.Action icon="search"  />
-                {this.props.activeUser? <Appbar.Action icon="face" />: null }
+        <Menu inverted style = {{ borderRadius: 5,backgroundColor: COLOR.POST }} attached='top'>
+
+        {this.props.activeUser !== null && this.props.activeUser.id===this.props.user.id?<Icon link size='big' inverted color= 'olive' name='add square' style ={{  marginLeft: + 3 ,marginTop: + 10 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.POST }}  onClick={() =>hashHistory.push(`/profile/${user.id}/createpost`)} />:null}
+
+              <Label style = {{ marginTop : 5 ,borderRadius: 5,backgroundColor: COLOR.POST }} as='h2' size='huge'><Icon name='copy'/>{namePost}</Label>
+              <Menu.Menu position='right'>
+
+              <Menu.Item>
+                 <Input className='icon' icon='search' placeholder='Search...' />
+              </Menu.Item>
+              <Icon link size='large'  color= 'red' circular name='close' style ={{  marginLeft: + 3 ,marginTop: + 8 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.POST }}  onClick={() =>hashHistory.push(`/profile/${user.id}`)} />
                 
-                
-                               
-                
-            </Appbar.Header>  
+              </Menu.Menu>
+            </Menu>  
                     
       </View>
                 <View style={{
@@ -344,10 +342,11 @@ class PostList extends Component {
                             borderLeftColor:  COLOR.POST,
                             borderLeftWidth: 4,
                             borderTopColor:  COLOR.POST,
-                            borderTopWidth: 20,
-                            borderRadius: 25,
+                            borderTopWidth: 12,
+                            
+                            borderRadius: 15,
                             // position: 'absolute', 
-                            marginTop: -18, 
+                            marginTop: 10, 
                             //marginRight: 0,
                             borderBottomColor:  COLOR.POST,
                             borderBottomWidth: 40,

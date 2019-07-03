@@ -105,7 +105,7 @@ timePostList(postList) {
       .map(post =>
         (this.EVENTS_USER[post.id] = ({
           date_start: new Date(`${post.date_debut}`) ,
-         
+          date_end: new Date(`${post.date_fin}`),
           
           title: post.title,
           color: COLOR.POST 
@@ -362,12 +362,12 @@ timeSongList(songList) {
                     
       
                
-                   
-            <div>   
-            <h3 style={{ color: COLOR.POST }}>{getFirstName(Number(userId), users) + ' Time-week-line'}</h3>
+            <div>       
             
-					   <a href="javascript:void(0)" onClick={this.restart_incremental.bind(this)}>Play Incremental / Restart</a>
-			     	
+            <h3 style={{ color: COLOR.POST }}>{getFirstName(Number(userId), users) + ' Time  '}
+            
+					  <a href="javascript:void(0)" onClick={this.restart_incremental.bind(this)}>Affiche le week-line / Restart</a></h3>
+            
 				<ReactLifeTimeline
 						subject_name={getFirstName(Number(userId), users)}
             birthday={constance}

@@ -109,18 +109,18 @@ export default class ReactLifeTimeline extends React.Component {
 	    		let title;
 	    		let subj = me ? 'I' : subject_name;
 	    		if (age == 0) {
-	    			let verb = me ? 'am' : 'is';
-	    			title = `${subj} ${verb} born!`;
+	    			let verb = me ? 'am' : 'est';
+	    			title = `${subj} ${verb} né!`;
 	    		} else {
-	    			let verb = me ? 'turn' : 'turns';
-					title = `${subj} ${verb} ${age} on ${birthday.getMonth()+1}/${birthday.getDate()}`;
+	    			let verb = me ? 'turn' : 'a eu';
+					title = `${subj} ${verb} ${age} ans le ${birthday.getMonth()+1}/${birthday.getDate()}`;
 	    		}
 	    		_events.push({title: title, color: color});
 	    	}
 	    }
 	    if (this_week) {
 	    	color = 'white';
-	    	_events.push({title: 'This week', color: color});
+	    	_events.push({title: 'Cette semaine', color: color});
 	    }
 	    return {
 	    	events: _events,

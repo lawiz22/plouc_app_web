@@ -3,12 +3,12 @@
 }
 .LifeTimeline > .week {
   display: inline-block;
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
   margin: 2px;
   padding: 0;
-  opacity: 0.5;
-  background: #555;
+  opacity: 0.7;
+  background: #444;
   transition: .4s linear opacity;
   position: relative;
 }

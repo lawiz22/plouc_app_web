@@ -5,6 +5,7 @@ import AuthenticationRequired from '../HOC/AuthenticationRequired';
 import Profile from "./";
 import PostList from "../PostList";
 import PostDetail from "../PostDetail";
+import PostForm from "../../forms/PostForm/PostForm";
 
 
 
@@ -12,7 +13,7 @@ import PostDetail from "../PostDetail";
 export default (
     <Route path="/profile/:userId" component={Authenticate(Profile)}>
        <Route path="posts" component={PostList}/>
-     
-       <Route path="posts/:postId" component={PostDetail}/>  
+       <Route path="posts/:postId" component={PostDetail}/>
+       <Route path="createpost" component={PostForm}/>  
     </Route>
 );

@@ -13,7 +13,7 @@ import * as songActions from "../../actions/songs";
 import {getUser} from '../../actions/accounts/user/get';
 import {getPostList} from '../../actions/posts/post/list';
 
-import PostForm from '../PostForm/PostForm'
+
 
 
 import HeaderProfile from '../../components/HeaderProfile'
@@ -71,18 +71,6 @@ class Profile extends Component {
     }));
 }
 
-
-renderPostFormSection() {
-  const {activeUser, params: {userId}} = this.props;
-  if (!activeUser || activeUser.id !== Number(userId)) return null;
-  return (
-      
-    
-            <PostForm/>
-
-              
-  );
-}
   contextRef = createRef()
   render() {
     const {activeUser} = this.props;
@@ -182,7 +170,7 @@ renderPostFormSection() {
               <div className="col-md-10">
               {this.props.children}
               </div>
-              {this.renderPostFormSection()}
+         
       </View>   
             
               
