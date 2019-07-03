@@ -42,7 +42,7 @@ const babelLoaderElement = {
 
       // The configration for compilation
       presets: [
-        '@babel/preset-env', 
+        ['@babel/preset-env'], 
         '@babel/preset-react',
         '@babel/preset-flow',
       ],
