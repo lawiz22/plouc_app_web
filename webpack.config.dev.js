@@ -31,7 +31,6 @@ const babelLoaderConfiguration = {
   include: [
     path.resolve(__dirname, './App.js'),
     path.resolve(__dirname, './src/'),
-    path.resolve(rootDirectory, 'node_modules/react-navigation'),
     path.resolve(rootDirectory, 'node_modules/react-native-drawer-layout'),
     path.resolve(rootDirectory, 'node_modules/react-native-dismiss-keyboard'),
     path.resolve(rootDirectory, 'node_modules/react-native-safe-area-view'),
@@ -126,7 +125,6 @@ module.exports = {
   resolve: {
     alias: {
       'react-native$': 'react-native-web',
-      'react-navigation$': 'react-navigation/lib/react-navigation.js',
     },
     // If you're working on a multi-platform React Native app, web-specific
     // module implementations should be written in files using the extension
