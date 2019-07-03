@@ -40,10 +40,7 @@ class Navigation extends Component {
     console.log(this.props.userposts_status.showPostfront)
     console.log(this.page.shotPostFront)
 
-    this.myLogo = [require('../../images/plouc_home_normal.png'),
-                        require('../../images/plouc_home_normal_2.png'), 
-                        require('../../images/plouc_home_normal_3.png'),
-                        require('../../images/plouc_home_normal_4.png'),
+    this.myLogo = [
                         require('../../images/plouc_home_normal_5.png'),
                       ];
 

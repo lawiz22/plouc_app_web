@@ -75,20 +75,14 @@ class Login extends Component {
 
     render() {
 
-        const myLogo = [require('../images/plouc_home_normal.png'),
-                        require('../images/plouc_home_normal_2.png'), 
-                        require('../images/plouc_home_normal_3.png'),
-                        require('../images/plouc_home_normal_4.png'),
+        const myLogo = [
                         require('../images/plouc_home_normal_5.png'),
                       ];
 
         const randLogo = myLogo[Math.floor(Math.random() * myLogo.length)]; 
 
         const myArbre = [   require('../images/arbre.png'),
-                            require('../images/arbre_2.png'),
-                            require('../images/arbre_3.png'),
-                            require('../images/arbre_5.png'),
-                            require('../images/arbre_6.png'),
+                           
                       ];
         const randArbre = myArbre[Math.floor(Math.random() * myArbre.length)];              
         
