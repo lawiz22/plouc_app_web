@@ -30,7 +30,7 @@ const babelLoaderConfiguration = {
   // Add every directory that needs to be compiled by Babel during the build
   include: [
     path.resolve(__dirname, './App.js'),
-    path.resolve(__dirname, './src/'),
+    //path.resolve(__dirname, './src/'),
     path.resolve(rootDirectory, 'node_modules/react-native-drawer-layout'),
     path.resolve(rootDirectory, 'node_modules/react-native-dismiss-keyboard'),
     path.resolve(rootDirectory, 'node_modules/react-native-safe-area-view'),
@@ -101,7 +101,7 @@ module.exports = {
             babelLoaderElement,
             babelLoaderLoad,
             scssLoader,
-            vectorIcon,
+            
             
             ]
       
