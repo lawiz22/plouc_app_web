@@ -5,6 +5,7 @@ import settings from '../../../config/settings';
 import {setNormalized} from '../../../utils/general';
 import {POST} from '../../../utils/normalize';
 import {tokenHeader} from '../../../utils/requestHeaders';
+import moment from 'moment';
 
 
 export const createPost = data => async dispatch => {
@@ -13,6 +14,9 @@ export const createPost = data => async dispatch => {
     let formData = new FormData();
     formData.append('body', data.body || '');
     formData.append('title', data.title || '');
+    formData.append('date_debut',data.date_debut || '');
+    formData.append('date_fin', data.date_fin || '');
+    formData.append('is_active', data.is_active || '');
     if(data.image) formData.append('image', data.image);
     try {
         const response = await axios.post(`${settings.API_ROOT}/posts`, formData, tokenHeader());

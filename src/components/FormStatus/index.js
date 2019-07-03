@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import { Label, Icon, Button } from 'semantic-ui-react'
 import './FormStatus.scss';
 
 
@@ -16,14 +17,32 @@ class FormStatus extends Component {
     renderSuccess = () => {
         const {formState: {success}} = this.props;
         if(!success) return;
-        return success;
+        return console.log(success)
     };
 
     render() {
+        const {formState: {success}} = this.props;
+        console.log(this.formState)
         return (
             <div className="FormStatus">
-                <span className="text-danger">{this.renderErrors()}</span>
-                <span className="text-success">{this.renderSuccess()}</span>
+                {this.renderErrors() != null?<Button as='div' labelPosition='right'>
+                    <Button color='red'>
+                    <Icon name='warning' />
+                        Warning
+                    </Button>
+                    <Label as='a' basic color='red' pointing='left'>
+                        {this.renderErrors()}
+                    </Label>
+                </Button>:null}
+                {!success?<Button as='div' labelPosition='right'>
+                    <Button color='olive'>
+                    <Icon name='hand victory' />
+                        
+                    </Button>
+                    
+                </Button>:null}
+                
+                
             </div>
         );
     }

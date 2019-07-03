@@ -9,17 +9,33 @@ import { bindActionCreators } from "redux";
 import PropTypes from 'prop-types';
 import * as authActions from "../../actions/authenticate";
 import * as postActions from "../../actions/posts";
+import * as deletePostAction from '../../actions/posts/post/delete';
 import * as voteCreate from '../../actions/votes/post-vote/create';
 import * as voteDelete from '../../actions/votes/post-vote/delete';
 import * as voteEdit from '../../actions/votes/post-vote/edit';
 import {getFirstName, getFullName} from '../../utils/user';
 import HeaderUserPostAll from '../../components/HeaderUserPostAll'
-import { Button, Icon, Image, Item, Label } from 'semantic-ui-react'
+import { Button, Icon, Image, Item, Label, Modal , Header} from 'semantic-ui-react'
 import settings from '../../config/settings';
 import moment from "moment";
 
 
 class PostList extends Component {
+
+    constructor(props) {
+        super(props);
+        
+        this.page = {
+          open: false,
+          
+        };
+
+        this.state = {
+           
+            itemSelect: null,
+          };
+        
+      }
 
     componentDidMount() {
         this.props.actionsposts.get_user_post()
@@ -96,6 +112,7 @@ class PostList extends Component {
       }
     };
 
+
     getVoteTally(postId) {
         const {postVotes} = this.props;
         
@@ -110,7 +127,11 @@ class PostList extends Component {
             .reduce((acc, postVote) => acc + postVote.value, 0);
       }
     
-
+    handleDelete (post) {
+        console.log(post.id)
+        this.props.actionDeletePost.deletePost(post);
+        this.set_show_modal()
+    };
     renderPostList(postList) {
         return postList
             .map(post =>
@@ -121,12 +142,87 @@ class PostList extends Component {
             );
     }
 
-    
+
+    renderModalWarning  () 
+    {
+        
+        const {users} = this.props;
+        console.log(this.state.itemSelect)
+        if(this.state.itemSelect == null) return null;
+         return (
+            <Modal dimmer='blurring' open={this.page.open} onClose={() => this.set_show_modal()}>
+            <Header icon='delete' content='Etes vous ben ben ben certain??' />   
+            <Modal.Content>
+            <Item >
+                <Item.Image size='tiny' src={(this.state.itemSelect.image !== null)?`${settings.API_ROOT}${this.state.itemSelect.image}`: require('../../images/post_no_image.png')} />
+                    
+                <Item.Content verticalAlign ='middle'>
+                 
+                   <Item.Header as='h2' onClick={() => hashHistory.push(`/profile/${this.state.itemSelect.user}/posts/${this.state.itemSelect.id}`)} >{this.state.itemSelect.title} </Item.Header>
+               
+                  <Item.Meta>
+                    <span className='cinema'>Par : {getFullName(this.state.itemSelect.user, users)} </span>
+                  </Item.Meta>
+                  
+                  <Item.Extra>
+                    
+                    <Label icon='globe' size='small' content={moment(this.state.itemSelect.created_date).format('YYYY-MM-DD hh:mm')} />
+                    <Label icon='calendar alternate outline' size='small' content={moment(this.state.itemSelect.date_debut).format('YYYY-MM-DD hh:mm')} />
+                  </Item.Extra>
+                  <Item.Extra>
+                    {(this.usersVoteValue(this.state.itemSelect.id) === 1)? <Icon color='green' name='arrow up' onClick={() => this.handleUpArrowClick(this.state.itemSelect.id)}/> :<Icon color='grey' name='arrow up' onClick={() => this.handleUpArrowClick(this.state.itemSelect.id)}/>}
+                    <a>{this.getVoteTally(this.state.itemSelect.id)} </a>
+                    {(this.usersVoteValue(this.state.itemSelect.id) === -1)? <Icon color='red' name='arrow down' onClick={() => this.handleDownArrowClick(this.state.itemSelect.id)}/> :<Icon color='grey' name='arrow down' onClick={() => this.handleDownArrowClick(this.state.itemSelect.id)}/>}
+                  <Button size="mini" as='div' labelPosition='right'>
+                        <Button icon>
+                          <Icon name='comments' />
+                          
+                        </Button>
+                        <Label size="mini" basic pointing='left'>
+                        {`${this.state.itemSelect.post_reply_count}`}
+                        </Label>
+                    </Button>  
+                    
+                  </Item.Extra>
+                  
+                </Item.Content>
+              </Item>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button color='red' onClick={() => this.set_show_modal()}>
+                NON
+              </Button>
+              <Button
+                color='green'
+                icon='delete'
+                labelPosition='right'
+                content="OUI"
+                onClick={() => this.handleDelete(this.state.itemSelect)}
+              />
+            </Modal.Actions>
+          </Modal>
+            );
+    }
+
+    set_show_modal = (item) => {
+        
+        this.page.open = !this.page.open
+      
+        this.setState({ itemSelect: item})
+        this.setState({ open: true })
+        console.log(item)
+        console.log(this.page.open)
+        console.log(this.page.itemSelect)
+
+        
+      }
 
     renderPostSection() {
 
-        const {params: {userId}, posts, users} = this.props;
+        const {params: {userId}, posts, users,user} = this.props;
         const {post} = this.props;
+        const {activeUser} = this.props;
+   
         const userList = Object.values(this.props.users)
         if (this.props.userposts !== null) {
         // const posts = JSON.stringify( this.props.userposts );
@@ -145,21 +241,26 @@ class PostList extends Component {
         
         // console.log(byVote);
         if (postList.length !== 0) return (
-          
+            <TouchableWithoutFeedback>
             <View>
               <FlatList
               data={ postList }       
               ItemSeparatorComponent = {this.FlatListItemSeparator}
               
               renderItem={({item}) =>
-              <TouchableWithoutFeedback > 
+              
               <View style={{flex:1, flexDirection: 'row', padding : 5 ,
                  borderColor: 'white', borderWidth: 4 }}>
-                 
+                 <div >
+                 {this.props.activeUser !== null && this.props.activeUser.id===this.props.user.id?<Button icon size='mini' floated='left'  onClick={() => this.set_show_modal(item)}>
+                            <Icon name='delete' />
+                                            
+                </Button>:null}
+                 </div>
                 <Item.Group divided>
                   <Item >
                     <Item.Image size='tiny' src={(item.image !== null)?`${settings.API_ROOT}${item.image}`: require('../../images/post_no_image.png')} />
-
+                        
                     <Item.Content verticalAlign ='middle'>
                      
                        <Item.Header as='h2' onClick={() => hashHistory.push(`/profile/${item.user}/posts/${item.id}`)} >{item.title} </Item.Header>
@@ -171,6 +272,7 @@ class PostList extends Component {
                       <Item.Extra>
                         
                         <Label icon='globe' size='small' content={moment(item.created_date).format('YYYY-MM-DD hh:mm')} />
+                        <Label icon='calendar alternate outline' size='small' content={moment(item.date_debut).format('YYYY-MM-DD hh:mm')} />
                       </Item.Extra>
                       <Item.Extra>
                         {(this.usersVoteValue(item.id) === 1)? <Icon color='green' name='arrow up' onClick={() => this.handleUpArrowClick(item.id)}/> :<Icon color='grey' name='arrow up' onClick={() => this.handleUpArrowClick(item.id)}/>}
@@ -181,22 +283,23 @@ class PostList extends Component {
                               <Icon name='comments' />
                               
                             </Button>
-                            <Label size="mini" as='a' basic pointing='left'>
+                            <Label size="mini" basic pointing='left'>
                             {`${item.post_reply_count}`}
                             </Label>
                         </Button>  
+                        
                       </Item.Extra>
                       
                     </Item.Content>
                   </Item>
                 </Item.Group>        
-                
+              
                 </View>
-                </TouchableWithoutFeedback>
-                             }
+               
+                             } 
               keyExtractor={(item, index) => index.toString()}
-              />
-            </View>
+              />{this.renderModalWarning()}
+            </View></TouchableWithoutFeedback>
             
            );
         } 
@@ -255,15 +358,18 @@ class PostList extends Component {
              {this.renderPostSection()}
                                           
             </ScrollView></View>
+
+            
             </div>
         );
     }
 
 }
 
+
 export default connect(
 
-    state => ({
+    (state,props) => ({
             state: state.authenticate,
             userposts_status : state.list_post,
             userposts : state.list_post.postList,
@@ -271,6 +377,7 @@ export default connect(
             users: state.users.data,
             posts: state.posts.data,
             postVotes: state.postVotes.data,
+            user: state.users.data[props.params.userId],
             
 }),
 dispatch => ({
@@ -279,6 +386,7 @@ dispatch => ({
             createvotes: bindActionCreators(voteCreate, dispatch),
             deletevotes: bindActionCreators(voteDelete, dispatch),
             editvotes: bindActionCreators(voteEdit, dispatch),
-            postUserAction : bindActionCreators(postUserAction, dispatch)
+            postUserAction : bindActionCreators(postUserAction, dispatch),
+            actionDeletePost : bindActionCreators(deletePostAction, dispatch)
             })
             )(PostList);

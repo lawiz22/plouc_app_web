@@ -199,7 +199,7 @@ class PostAll extends Component {
       
 
       renderPostSection() {
-        
+        const {activeUser} = this.props;
         if (this.props.userposts !== null) {
         // const posts = JSON.stringify( this.props.userposts );
         const postList = Object.values(this.props.userposts)
@@ -226,6 +226,7 @@ class PostAll extends Component {
               <TouchableWithoutFeedback > 
               <View style={{flex:1, flexDirection: 'row', padding : 5 ,
                  borderColor: this.page.postDetail.id === item.id?COLOR.POST:'white', borderWidth: 4 }}>
+                 
                 <Item.Group divided>
                   <Item >
                     <Item.Image size='tiny' src={(item.image !== null)?`${settings.API_ROOT}${item.image}`: require('../images/post_no_image.png')} />
@@ -241,11 +242,18 @@ class PostAll extends Component {
                       <Item.Extra>
                         
                         <Label icon='globe' size='small' content={moment(item.created_date).format('YYYY-MM-DD hh:mm')} />
+                        
+                                {this.props.activeUser !== null && this.props.activeUser.id === item.user.id?
+                                <Button icon size='mini' floated='left'>
+                                      <Icon name='delete' />
+                               </Button>:null}
+                         
                       </Item.Extra>
                       <Item.Extra>
                         {(this.usersVoteValue(item.id) === 1)? <Icon color='green' name='arrow up' onClick={() => this.handleUpArrowClick(item.id)}/> :<Icon color='grey' name='arrow up' onClick={() => this.handleUpArrowClick(item.id)}/>}
                         <a>{this.getVoteTally(item.id)} </a>
                         {(this.usersVoteValue(item.id) === -1)? <Icon color='red' name='arrow down' onClick={() => this.handleDownArrowClick(item.id)}/> :<Icon color='grey' name='arrow down' onClick={() => this.handleDownArrowClick(item.id)}/>}
+                        
                       <Button size="mini" as='div' labelPosition='right'>
                             <Button icon>
                               <Icon name='comments' />
@@ -254,7 +262,7 @@ class PostAll extends Component {
                             <Label size="mini" as='a' basic pointing='left'>
                             {`${item.post_reply_count}`}
                             </Label>
-                        </Button>  
+                        </Button> 
                       </Item.Extra>
                       
                     </Item.Content>

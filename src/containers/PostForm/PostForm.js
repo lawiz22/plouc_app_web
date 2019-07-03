@@ -8,9 +8,15 @@ import Styles, { COLOR } from "../../config/styles";
 import {createPost} from '../../actions/posts/post/create';
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import FormStatus from '../../components/FormStatus';
-import {renderInput, renderTextArea, renderTextAreaOK} from '../../utils/redux-form-fields';
+import renderDatePicker from '../../utils/renderDatePicker';
+import {renderInput, renderTextArea, renderTextAreaOK, renderRadio} from '../../utils/redux-form-fields';
 import { Avatar, Card as CardOld, Paragraph, Badge, Appbar, Title, Button as ButPaper, List, IconButton} from 'react-native-paper';
-import { Form, Message } from "semantic-ui-react";
+import { Form, Message, Button } from "semantic-ui-react";
+import moment from 'moment';
+
+import DatePicker from "react-datepicker";
+ 
+import "react-datepicker/dist/react-datepicker.css";
 import './PostForm.scss';
 
 const FILE_FIELD_NAME = 'files';
@@ -27,8 +33,14 @@ class PostForm extends Component {
              image: [],
              error: null,
              files: [],
-             success: null};
+             success: null,
+             startDate: new Date(),
+             endDate: new Date(),
+             };
+             
          this.onDrop = this.onDrop.bind(this);
+         this.handleStartDateChange = this.handleStartDateChange.bind(this);
+         this.handleEndDateChange = this.handleEndDateChange.bind(this);
     }
 
     onDrop(picture) {
@@ -37,8 +49,20 @@ class PostForm extends Component {
         });
     }
 
+    handleStartDateChange(date) {
+        this.setState({
+          startDate: date
+        });
+      }
+
+    handleEndDateChange(date) {
+        this.setState({
+          endDate: date
+        });
+     }  
     formSubmit = data => {
         const {activeUser, dispatch, posts} = this.props;
+        console.log(data)
         dispatch(createPost({
             ...data,
             image: this.state.image[0],
@@ -51,6 +75,7 @@ class PostForm extends Component {
             .catch(error => {
                 this.setState({error: error.response.data});
             });
+            
     };
 
     
@@ -102,8 +127,8 @@ class PostForm extends Component {
                                 
               <View style={{
                                     
-                                    // height: 700,
-                                    //width: 550,
+                                    height: 700,
+                                    width: 550,
                                     borderRightColor:  COLOR.POST,
                                     borderRightWidth: 4,
                                     borderLeftColor:  COLOR.POST,
@@ -125,41 +150,85 @@ class PostForm extends Component {
                      
                        <div >
                             <form className="PostForm" onSubmit={handleSubmit(this.formSubmit)}>
-                                <FormStatus formState={this.state}/>
+                               
                                 
                                 <div>
                                 <ImageUploader
                                         withPreview={true}
                                         singleImage={true}
-                                        buttonText='Choose images'
+                                        buttonText='Choisir IMAGE'
+                                        buttonStyles={{ backgroundColor : COLOR.POST}}
                                         onChange={this.onDrop.bind(this)}
                                         imgExtension={['.jpg', '.gif', '.png', '.gif']}
                                         maxFileSize={5242880}
                                  />
                                  </div>
                             {this.renderImagePreview()}
-                                <button className="btn btn-primary" type="submit">Submit</button>
+                                
                             </form>
                             
                             <FormStatus formState={this.state}/>
                             <Form onSubmit={handleSubmit(this.formSubmit)}>
+                            <Form.Group widths="equal"> 
+                                
+                                <Field  
+                                        inputValueFormat="MM/DD/YYYY"
+                                        name="date_debut"
+                                        placeholder="Date Debut"
+                                        fixedHeight
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
+                                        normalize={value => (value ? moment(value).format('YYYY-MM-DD hh:mm:ss') : null)}
+                                        component={renderDatePicker}
+                                        />  
+                                <Field  
+                                        inputValueFormat="MM/DD/YYYY"
+                                        name="date_fin"
+                                        placeholder="Date Fin"
+                                        fixedHeight
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
+                                        normalize={value => (value ? moment(value).format('YYYY-MM-DD hh:mm:ss') : null)}
+                                        component={renderDatePicker}
+                                        />
+                                
+                                
+                                <div>
+                                <Field
+                                    component={renderRadio}
+                                    label="Active public"
+                                    name="is_active"
+                                    radioValue={true}
+                                />
+                                <Field
+                                    component={renderRadio}
+                                    label="Inactive"
+                                    name="is_active"
+                                    radioValue={false}
+                                />
+                                </div>
+                            </Form.Group> 
                             <Form.Group widths="equal">
                             <Field
                                 component={Form.Input}
                                 label="Titre"
                                 name="title"
-                                placeholder="First name"
+                                placeholder="Titre"
                                 
-                            />
+                            /></Form.Group>
                             <Field
                                 component={renderTextAreaOK}
-                                label="Body"
+                                label="Description"
                                 name="body"
-                                placeholder="Tell us more about you..."
+                                placeholder="Description..."
                                 />
-                            </Form.Group>
-                            </Form>
 
+                             
+                            <Button color='olive'>Post</Button>
+                            </Form>
+                            
                             </div>                          
                     </ScrollView>
         
