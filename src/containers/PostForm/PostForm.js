@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Dropzone from 'react-dropzone'
+
 import ImageUploader from 'react-images-upload';
 import {hashHistory} from 'react-router';
 import {Field, reduxForm} from 'redux-form';
@@ -55,16 +55,7 @@ class PostForm extends Component {
 
     
 
-    renderDropZone() {
-        const {image} = this.state;
-        if (image.length > 0) return null;
-        return (
-            
-            <Dropzone onDrop={this.onDrop} multiple={false}>
-                
-            </Dropzone>
-        );
-    }
+   
     
 
     renderImagePreview() {
