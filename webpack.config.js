@@ -85,6 +85,10 @@ module.exports = {
     path: path.join(__dirname, 'public'),
     filename: 'js/bundle.js',
   },
+  optimization: {
+		// We no not want to minimize our code.
+		minimize: false
+	},
   devtool: 'cheap-module-eval-source-map',
   plugins: [
     // `process.env.NODE_ENV === 'production'` must be `true` for production
