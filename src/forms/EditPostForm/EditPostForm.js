@@ -3,25 +3,30 @@ import {connect} from 'react-redux';
 
 import ImageUploader from 'react-images-upload';
 import {hashHistory} from 'react-router';
-import {Field, reduxForm} from 'redux-form';
+import {Field, reduxForm, actions} from 'redux-form';
+
 import Styles, { COLOR } from "../../config/styles";
 import {createPost} from '../../actions/posts/post/create';
+import {editPost} from '../../actions/posts/post/edit';
+import * as postActions from "../../actions/posts";
+import * as postUserActionList from '../../actions/posts/post/list';
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
 import FormStatus from '../../components/FormStatus';
 import renderDatePicker from '../../utils/renderDatePicker';
+import * as postUserActionGet from '../../actions/posts/post/get';
 import {renderInput, renderTextArea, renderTextAreaOK, renderRadio} from '../../utils/redux-form-fields';
 import { Avatar, Card as CardOld, Paragraph, Badge, Appbar, Title, Button as ButPaper, List, IconButton} from 'react-native-paper';
-import { Form, Message, Button,Label } from "semantic-ui-react";
+import { Form, Message, Button , Image, Label} from "semantic-ui-react";
 import moment from 'moment';
-
+import { bindActionCreators } from "redux";
 import DatePicker from "react-datepicker";
- 
+import settings from '../../config/settings';
 import "react-datepicker/dist/react-datepicker.css";
-import './PostForm.scss';
+import './EditPostForm.scss';
 
 const FILE_FIELD_NAME = 'files';
 
-class PostForm extends Component {
+class EditPostForm extends Component {
 
     state = {
         
@@ -30,22 +35,60 @@ class PostForm extends Component {
     constructor(props) {
         super(props);
          this.state = { 
-             image: [],
+             image :[],
              error: null,
              files: [],
              success: null,
              startDate: new Date(),
              endDate: new Date(),
+             newImage: false,
              };
              
          this.onDrop = this.onDrop.bind(this);
          this.handleStartDateChange = this.handleStartDateChange.bind(this);
          this.handleEndDateChange = this.handleEndDateChange.bind(this);
+        // this.loadPost.bind(this);
+         
     }
 
+    componentDidMount() {
+
+        const { params: {postId}, post} = this.props;
+        this.props.postUserActionGet.getPost(postId);
+
+        
+    
+          
+    }
+    componentWillMount() {
+        
+    }
+
+    setDefaultPost (values)  {
+        const {activeUser, dispatch, posts} = this.props;  
+        dispatch(actions.change('post', values))
+    }
+
+
+    download(url) {
+        // fake server request, getting the file url as response
+        setTimeout(() => {
+          const response = {
+            file: url,
+          };
+          
+          //return response.file;
+          // server sent the url to the file!
+          // now, let's download:
+          //window.open(response.file);
+          // you could also do:
+          window.location.href = response.file;
+        }, 100);
+      }
     onDrop(picture) {
         this.setState({
-            image: this.state.image.concat(picture),
+            image: picture,
+            newImage: true,
         });
     }
 
@@ -63,7 +106,7 @@ class PostForm extends Component {
     formSubmit = data => {
         const {activeUser, dispatch, posts} = this.props;
         console.log(data)
-        dispatch(createPost({
+        dispatch(editPost({
             ...data,
             image: this.state.image[0],
             user: activeUser.id
@@ -79,13 +122,19 @@ class PostForm extends Component {
     };
 
     
-
+    loadPost() {
+        const {post} = this.props;
+        this.setDefaultPost(
+           Object.values(post)
+        )
+      }
    
     
 
     renderImagePreview() {
         const {image} = this.state;
         if (image.length === 0) return null;
+        if (image === null) return null;
         console.log(image);
         return image.map(file => (
             <div className="image-preview" key={file.name}>
@@ -99,8 +148,16 @@ class PostForm extends Component {
 
     render() {
       
-        const { handleSubmit, pristine, reset, submitting } = this.props;
-        
+        const { handleSubmit, pristine, reset, submitting, posts } = this.props;
+        const {post} = this.props;
+        const {activeUser} = this.props;
+        if (!post) return null;
+        if (post != null){ 
+            console.log(`${settings.API_ROOT}${post.image}`)
+            console.log(post)
+            const file = (`${settings.API_ROOT}${post.image}`);   
+            //this.loadPost()
+             }
         return ( 
         
             <div className="PostAll">
@@ -151,7 +208,7 @@ class PostForm extends Component {
                        <div >
                             <form className="PostForm" onSubmit={handleSubmit(this.formSubmit)}>
                                
-                                
+                            {(post.image != null && !this.state.image[0])?<Image centered size='small' src={`${settings.API_ROOT}${post.image}`}/> : null}
                                 <div>
                                 <ImageUploader
                                         withPreview={true}
@@ -159,20 +216,24 @@ class PostForm extends Component {
                                         buttonText='Choisir IMAGE'
                                         buttonStyles={{ backgroundColor : COLOR.POST}}
                                         onChange={this.onDrop.bind(this)}
+                                        
                                         imgExtension={['.jpg', '.gif', '.png', '.gif']}
                                         maxFileSize={5242880}
+                                        
+                                        
+                                        
                                  />
                                  </div>
-                            {this.renderImagePreview()}
+                        
                                 
                             </form>
                             
                             <FormStatus formState={this.state}/>
-                            <Form onSubmit={handleSubmit(this.formSubmit)}>
+                            <Form model="post" onSubmit={handleSubmit(this.formSubmit)}>
                             <Form.Group widths="equal"> 
                                 
                                 <Field  
-                                        inputValueFormat="MM/DD/YYYY"
+                                        inputValueFormat="YYYY-MM-DD hh:mm:ss"
                                         name="date_debut"
                                         placeholder="Date Debut"
                                         fixedHeight
@@ -181,9 +242,9 @@ class PostForm extends Component {
                                         dropdownMode="select"
                                         normalize={value => (value ? moment(value).format('YYYY-MM-DD hh:mm:ss') : null)}
                                         component={renderDatePicker}
-                                        />
+                                        />  
                                 <Field  
-                                        inputValueFormat="MM/DD/YYYY"
+                                        inputValueFormat="YYYY-MM-DD hh:mm:ss"
                                         name="date_fin"
                                         placeholder="Date Fin"
                                         fixedHeight
@@ -209,12 +270,14 @@ class PostForm extends Component {
                                     radioValue={false}
                                 />
                                 </div>
-                            </Form.Group> 
+                             </Form.Group>
                             <Form.Group widths="equal">
                             <Field
                                 component={Form.Input}
                                 label="Titre"
                                 name="title"
+                                value={(post != null)?post.title:null}
+                                
                                 placeholder="Titre"
                                 
                             /></Form.Group>
@@ -245,11 +308,22 @@ class PostForm extends Component {
 
 }
 
-PostForm = reduxForm({
-    form: 'PostForm'
-})(PostForm);
 
-export default connect(state => ({
+EditPostForm = reduxForm({
+    form: 'PostForm'
+})(EditPostForm);
+
+export default connect((state, props) => ({
     activeUser: state.activeUser,
-    posts: state.posts
-}))(PostForm);
+    post: state.posts.data[props.params.postId],
+    users: state.users.data,
+    posts: state.posts.data,
+    initialValues: state.posts.data[props.params.postId],
+    
+}),
+dispatch => ({
+            actionsposts: bindActionCreators(postActions, dispatch),
+            postUserActionList : bindActionCreators(postUserActionList, dispatch),
+            postUserActionGet : bindActionCreators(postUserActionGet, dispatch),
+
+            }))(EditPostForm);

@@ -334,7 +334,8 @@ getPostreply(postId) {
 
   render() {
     const {activeUser} = this.props;
-    const {post, users} = this.props;
+    const {users} = this.props;
+    const {params: {userId}, params: {postId}, post, user} = this.props;
     if (!post) return null;
     return (
       
@@ -344,7 +345,7 @@ getPostreply(postId) {
       
       <Appbar.Header theme={{ colors: { primary: COLOR.POST }}} >
                
-               {this.props.activeUser? <Appbar.Action icon="edit" />: null }
+               {this.props.activeUser && post?<Appbar.Action icon="edit" onPress={() =>hashHistory.push(`/profile/${this.props.activeUser.id}/editpost/${this.props.post.id}`)} />: null }
                
             
                 <Appbar.Content
