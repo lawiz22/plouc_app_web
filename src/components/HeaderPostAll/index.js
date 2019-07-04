@@ -7,7 +7,7 @@ import Styles, { COLOR } from "../../config/styles";
 import { bindActionCreators } from "redux";
 import * as authActions from "../../actions/authenticate";
 import * as postActions from "../../actions/posts";
-
+import { Input, Card, Icon , Button as ButNew, Grid,Image as ImgNew, Label, Header, Modal, Statistic, Menu, Dropdown} from 'semantic-ui-react'
 import { connect } from "react-redux";
 
 import {hashHistory} from 'react-router'
@@ -51,26 +51,32 @@ class HeaderPostAll extends Component {
 
   render() {
     const {activeUser} = this.props;
+    const pasRandomLogo = require('../../images/POSTS_PETIT.png')
     return (
       <View style={styles.container}>
       
-      <Appbar.Header theme={{ colors: { primary: COLOR.POST }}} >
-               
-               
-               <Appbar.Action icon="content-copy" />
-            
-                <Appbar.Content
-                title="POSTS"
-                subtitle=""
-                style ={{ alignItems: 'center' }} 
-                />
-                <Appbar.Action icon="search"  />
-                {this.props.activeUser? <Appbar.Action icon="face" />: null }
-                {!this.props.userposts_status.showDetailview&&this.props.userposts_status.postDetail !== null? <Appbar.Action icon="arrow-downward" onPress={() =>{ this.showPostdetail()}} />: null }
-                {this.props.userposts_status.showDetailview? <Appbar.Action icon="arrow-forward"  onPress={() =>{ this.showPostdetail()}} /> : null }
-                               
+     
+
+            <Menu inverted style = {{ backgroundColor: COLOR.POST }} attached='top'>
+              <Icon link size='large' inverted bordered circular  name='copy' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() => hashHistory.push('/login')} />
+              
+              
+
+              
+              <Menu.Menu position='right'>
+              <Menu.Item>
+                 <Input className='icon' icon='search' placeholder='Search...' />
+              </Menu.Item>
                 
-            </Appbar.Header>  
+                <Image
+                                      source={pasRandomLogo}
+                                      style={{ width: 121, height: 60 }}
+                                      onClick={() => hashHistory.push('/')}
+                                    />
+                {!this.props.userposts_status.showDetailview&&this.props.userposts_status.postDetail !== null? <Icon link size='large' inverted color= 'olive' circular  name='arrow circle down' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() =>{ this.showPostdetail()}} />: null }                    
+                {this.props.userposts_status.showDetailview? <Icon link size='large' inverted color= 'olive' circular  name='arrow circle right' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() =>{ this.showPostdetail()}} />: null }                    
+              </Menu.Menu>
+            </Menu>  
                     
       </View> 
     );

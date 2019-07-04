@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { Animated, View,  StyleSheet, ScrollView, Text } from 'react-native';
+import { Animated, View,  StyleSheet, ScrollView, Text, ImageBackground } from 'react-native';
 import { DefaultTheme, Appbar, Title, Badge, Button as ButPaper } from 'react-native-paper';
 // import { Avatar } from 'react-native-elements';
 
@@ -46,6 +46,11 @@ class Home extends Component {
   contextRef = createRef()
   render() {
     const {activeUser} = this.props;
+
+    const myArbre = [   require('../images/sentier.jpg'),
+                           
+                      ];
+        const randArbre = myArbre[Math.floor(Math.random() * myArbre.length)];
     return (
       <div className="Home">
       
@@ -54,7 +59,7 @@ class Home extends Component {
           <Navigation/>
       
         </Sticky>
-       
+        <ImageBackground opacity='0.5' source={`${ randArbre }`} style={{width: '100%', height: '100%',  alignItems: 'stretch',}}>
           <Ref innerRef={this.contextRef}> 
       
             <View style={styles.container}> 
@@ -74,8 +79,8 @@ class Home extends Component {
               
          </Ref>            
                   
-              
-              
+          </ImageBackground>        
+          
          
       </div>
       
