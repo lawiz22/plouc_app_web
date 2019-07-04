@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { Animated, View,  StyleSheet, ScrollView, Text } from 'react-native';
+import { Animated, View,  StyleSheet, ScrollView, Text ,ImageBackground} from 'react-native';
 import { DefaultTheme, Appbar, Title, Badge, Button as ButPaper } from 'react-native-paper';
 // import { Avatar } from 'react-native-elements';
 import {Link} from 'react-router';
@@ -77,7 +77,10 @@ class Profile extends Component {
     const {user, users} = this.props;
     if(!user) return null;
     const res = this.props.location.pathname.substr(-4, this.props.location.pathname.length);
-    
+    const myArbre = [   require('../../images/nuage.jpg'),
+                           
+                      ];
+    const randArbre = myArbre[Math.floor(Math.random() * myArbre.length)];
     const extra = (
       <a>
         <Icon name='user' />
@@ -92,7 +95,7 @@ class Profile extends Component {
           <Navigation/>
          
        </Sticky>
-       
+       <ImageBackground opacity='0.5' source={`${ randArbre }`} style={{width: '100%', height: '100%',  alignItems: 'stretch',}}>
        
           <Ref innerRef={this.contextRef}> 
       
@@ -176,7 +179,7 @@ class Profile extends Component {
               
                    </Ref>  
                   
-              
+                   </ImageBackground>          
               
          
       </div>
