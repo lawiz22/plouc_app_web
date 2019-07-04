@@ -76,7 +76,7 @@ class Login extends Component {
     render() {
 
         const myLogo = [
-                        require('../images/plouc_home_normal_5.png'),
+                        require('../images/PLOUC.png'),
                       ];
 
         const randLogo = myLogo[Math.floor(Math.random() * myLogo.length)]; 
@@ -166,8 +166,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     logo: {
-        width: 480,
-        height: 115,
+        width: 430,
+        height: 188,
         opacity: 0.8,
         top : +100
     },

@@ -169,7 +169,7 @@ componentWillUnMount(){
     const {activeUser} = this.props;
     
 
-    const pasRandomLogo = require('../../images/plouc_home_normal_5.png')
+    const pasRandomLogo = require('../../images/PLOUC_Small_pas_glow.png')
 
     
     return (
@@ -189,7 +189,7 @@ componentWillUnMount(){
                 <p style = {{ color : COLOR.POST , fontSize : 10, marginTop : + 35}}> { this.state.time } </p>
                 <Image
                                       source={pasRandomLogo}
-                                      style={{ width: 220, height: 50 }}
+                                      style={{ width: 121, height: 60 }}
                                       onClick={() => hashHistory.push('/')}
                                     />
                 {this.props.activeUser?<Link className="nav-link" to={`/profile/${activeUser.id}/`}> <Icon link size='large' inverted bordered circular name='user' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.PROFILE }}  onClick={() =>{ this.crissTouteOff()}}  /> </Link>: null }
