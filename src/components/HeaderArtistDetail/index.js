@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Animated, View, Image, StyleSheet, PanResponder, Text } from 'react-native';
 import { DefaultTheme, Appbar, Title, Badge, Button as ButPaper } from 'react-native-paper';
 // import { Avatar } from 'react-native-elements';
+import { Input, Card, Icon , Button as ButNew, Grid,Image as ImgNew, Label, Header, Modal, Statistic, Menu, Dropdown} from 'semantic-ui-react'
 
 import Styles, { COLOR } from "../../config/styles";
 import { bindActionCreators } from "redux";
@@ -60,24 +61,27 @@ class HeaderArtistDetail extends Component {
 
   render() {
     const {activeUser} = this.props;
+    const pasRandomLogo = require('../../images/ARTISTS_PETIT_5.png')
     return (
       <View style={styles.container}>
       
-      <Appbar.Header theme={{ colors: { primary: COLOR.ARTIST }}} >
-               
-               {this.props.activeUser? <Appbar.Action icon="edit" />: null }
-               
-            
-                <Appbar.Content
-                title={this.props.userartists_status.artistDetail.artist}
-                subtitle=""
-                style ={{ alignItems: 'center' }} 
-                />
-                <Appbar.Action icon="clear" onPress={() =>{ this.showArtistdetail()}} /> 
-                               
-                
-            </Appbar.Header>  
-                    
+       
+      <Menu inverted style = {{ backgroundColor: COLOR.ARTIST }} attached='top'>
+              
+            <Label  style = {{ width : 60, color : 'white', marginTop : 5 ,borderRadius: 5,backgroundColor: COLOR.ARTIST }} as='h2' size='huge'><Icon name='users'/> </Label>
+              <Image
+                                      source={pasRandomLogo}
+                                      style={{ width: 211, height: 60 }}
+                                      onClick={() => hashHistory.push('/')}
+                                    />
+
+              
+              <Menu.Menu position='right'>
+              
+              <Icon link size='large'  color= 'red' circular name='close' style ={{  marginLeft: + 3 ,marginTop: + 8 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.POST }}  onClick={() =>{ this.showArtistdetail()}} />
+                                  
+              </Menu.Menu>
+            </Menu>               
       </View> 
     );
   }

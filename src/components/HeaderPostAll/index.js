@@ -58,7 +58,7 @@ class HeaderPostAll extends Component {
      
 
             <Menu inverted style = {{ backgroundColor: COLOR.POST }} attached='top'>
-              <Icon link size='large' inverted bordered circular  name='copy' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() => hashHistory.push('/login')} />
+              <Icon link size='large' inverted bordered circular  name='copy' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} />
               
               
 

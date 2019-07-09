@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Animated, View, Image, StyleSheet, PanResponder, Text } from 'react-native';
 import { DefaultTheme, Appbar, Title, Badge, Button as ButPaper } from 'react-native-paper';
+import { Input, Card, Icon , Button as ButNew, Grid,Image as ImgNew, Label, Header, Modal, Statistic, Menu, Dropdown} from 'semantic-ui-react'
 // import { Avatar } from 'react-native-elements';
 
 import Styles, { COLOR } from "../../config/styles";
@@ -60,23 +61,27 @@ class HeaderPostDetail extends Component {
 
   render() {
     const {activeUser} = this.props;
+    const pasRandomLogo = require('../../images/POSTS_PETIT.png')
     return (
       <View style={styles.container}>
       
-      <Appbar.Header theme={{ colors: { primary: COLOR.POST }}} >
-               
-               {this.props.activeUser? <Appbar.Action icon="edit" />: null }
-               
-            
-                <Appbar.Content
-                title={this.props.userposts_status.postDetail.title}
-                subtitle={this.props.userposts_status.postDetail.user.first_name}
-                style ={{ alignItems: 'center' }} 
-                />
-                <Appbar.Action icon="clear" onPress={() =>{ this.showPostdetail()}} /> 
-                               
-                
-            </Appbar.Header>  
+      
+            <Menu inverted style = {{ backgroundColor: COLOR.POST }} attached='top'>
+              
+            <Label style = {{ marginTop : 5 ,borderRadius: 5,backgroundColor: COLOR.POST }} as='h2' size='huge'><Icon name='copy'/> </Label>
+              
+
+              
+              <Menu.Menu position='right'>
+              <Image
+                                      source={pasRandomLogo}
+                                      style={{ width: 121, height: 60 }}
+                                      
+                                    />
+              <Icon link size='large'  color= 'red' circular name='close' style ={{  marginLeft: + 3 ,marginTop: + 8 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.POST }}  onClick={() =>{ this.showPostdetail()}} />
+                                  
+              </Menu.Menu>
+            </Menu>       
                     
       </View> 
     );
@@ -85,7 +90,7 @@ class HeaderPostDetail extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: 550,
+    width: 600,
      //flex: 1,
      //flexDirection: 'row',
      //alignItems: 'stretch',

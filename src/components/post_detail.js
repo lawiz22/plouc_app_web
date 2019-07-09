@@ -338,7 +338,7 @@ getPostreply(postId) {
       <View style={{
                             
                             height: 700,
-                            width: 550,
+                            width: 600,
                             borderRightColor:  COLOR.POST,
                             borderRightWidth: 4,
                             borderLeftColor:  COLOR.POST,
