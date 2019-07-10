@@ -230,7 +230,7 @@ page = {
       <View style={{
                             
                             height: 675,
-                            width: 450,
+                            width: 550,
                             borderRightColor:  COLOR.SONG,
                             borderRightWidth: 4,
                             borderLeftColor:  COLOR.SONG,
@@ -244,6 +244,7 @@ page = {
                             borderBottomColor:  COLOR.SONG,
                             borderBottomWidth: 40,
                             justifyContent: 'center',
+                            backgroundColor: COLOR.LIGHT_GRAY,
                             // alignItems: 'stretch',
                         }} >
             <Badge size={30} style={{ top: 1, left: -4, backgroundColor: COLOR.SONG }}> {this.props.usersongs_status.songTotal} </Badge>
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
     textAlignVertical:'center',
     padding:5,
     position : 'absolute',
-    left : 75,
+    left : 90,
     top : 50,
     fontSize: 16,
     //fontWeight: 'bold',
@@ -327,7 +328,7 @@ textViewArtist: {
   textAlignVertical:'center',
   padding:5,
   position : 'absolute',
-  left : 75,
+  left : 90,
   top : 24,
   fontSize: 16,
   color : COLOR.SONG,

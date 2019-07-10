@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Animated, View, Image, StyleSheet, PanResponder, Text } from 'react-native';
 import { DefaultTheme, Appbar, Title, Badge, Button as ButPaper } from 'react-native-paper';
 // import { Avatar } from 'react-native-elements';
+import { Input, Card, Icon , Button as ButNew, Grid,Image as ImgNew, Label, Header, Modal, Statistic, Menu, Dropdown} from 'semantic-ui-react'
 
 import Styles, { COLOR } from "../../config/styles";
 import { bindActionCreators } from "redux";
@@ -60,23 +61,28 @@ class HeaderAlbumDetail extends Component {
 
   render() {
     const {activeUser} = this.props;
+    const pasRandomLogo = require('../../images/ALBUMS_PETIT_1.png')
     return (
       <View style={styles.container}>
       
-      <Appbar.Header theme={{ colors: { primary: COLOR.ALBUM }}} >
-               
-               {this.props.activeUser? <Appbar.Action icon="edit" />: null }
-               
-            
-                <Appbar.Content
-                title={this.props.useralbums_status.albumDetail.album_title}
-                subtitle={this.props.useralbums_status.albumDetail.artist}
-                style ={{ alignItems: 'center' }} 
-                />
-                <Appbar.Action icon="clear" onPress={() =>{ this.showAlbumdetail()}} /> 
-                               
-                
-            </Appbar.Header>  
+      
+
+            <Menu inverted style = {{ backgroundColor: COLOR.ALBUM }} attached='top'>
+              
+            <Label  style = {{ width : 60, color : 'white', marginTop : 5 ,borderRadius: 5,backgroundColor: COLOR.ALBUM }} as='h2' size='huge'><Icon name='outdent'/> </Label>
+              <Image
+                                      source={pasRandomLogo}
+                                      style={{ width: 179, height: 60 }}
+                                      onClick={() => hashHistory.push('/')}
+                                    />
+
+              
+              <Menu.Menu position='right'>
+              
+              <Icon link size='large'  color= 'red' circular name='close' style ={{  marginLeft: + 3 ,marginTop: + 8 ,width:45 , height : 45, borderWidth: 4, borderColor: COLOR.POST }}  onClick={() =>{ this.showAlbumdetail()}} />
+                                  
+              </Menu.Menu>
+            </Menu>  
                     
       </View> 
     );

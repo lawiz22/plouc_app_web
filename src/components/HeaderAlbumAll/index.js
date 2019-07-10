@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Animated, View, Image, StyleSheet, PanResponder, Text } from 'react-native';
 import { DefaultTheme, Appbar, Title, Badge, Button as ButPaper } from 'react-native-paper';
 // import { Avatar } from 'react-native-elements';
+import { Input, Card, Icon , Button as ButNew, Grid,Image as ImgNew, Label, Header, Modal, Statistic, Menu, Dropdown} from 'semantic-ui-react'
 
 import Styles, { COLOR } from "../../config/styles";
 import { bindActionCreators } from "redux";
@@ -46,25 +47,31 @@ class HeaderAlbumAll extends Component {
 
   render() {
     const {activeUser} = this.props;
+    const pasRandomLogo = require('../../images/ALBUMS_PETIT_1.png')
     return (
       <View style={styles.container}>
       
-      <Appbar.Header theme={{ colors: { primary: COLOR.ALBUM }}} >
-               
-               
-               <Appbar.Action icon="library-music" />
-            
-                <Appbar.Content
-                title="ALBUMS"
-                subtitle=""
-                style ={{ alignItems: 'center' }} 
-                />                
-                <Appbar.Action icon="search"  />
-                {this.props.activeUser? <Appbar.Action icon="face" />: null }
-                {!this.props.useralbums_status.showDetailview&&this.props.useralbums_status.albumDetail !== null? <Appbar.Action icon="arrow-downward" onPress={() =>{ this.showAlbumdetail()}} />: null }
-                {this.props.useralbums_status.showDetailview? <Appbar.Action icon="arrow-forward"  onPress={() =>{ this.showAlbumdetail()}} /> : null }
-            </Appbar.Header>  
-                    
+        
+            <Menu inverted style = {{ backgroundColor: COLOR.ALBUM }} attached='top'>
+              <Icon link size='large' inverted bordered circular  name='outdent' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} />
+              
+              
+
+              
+              <Menu.Menu position='right'>
+              <Menu.Item>
+                 <Input className='icon' icon='search' placeholder='Search...' />
+              </Menu.Item>
+                
+                <Image
+                                      source={pasRandomLogo}
+                                      style={{ width: 179, height: 60 }}
+                                      onClick={() => hashHistory.push('/')}
+                                    />
+                {!this.props.useralbums_status.showDetailview&&this.props.useralbums_status.albumDetail !== null? <Icon link size='large' inverted color= 'yellow' circular  name='arrow circle down' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() =>{ this.showAlbumdetail()}} />: null }                    
+                {this.props.useralbums_status.showDetailview? <Icon link size='large' inverted color= 'yellow' circular  name='arrow circle right' style ={{  marginLeft: + 3 ,marginTop: + 6 ,width:45 , height : 45  }} onClick={() =>{ this.showAlbumdetail()}} />: null }                    
+              </Menu.Menu>
+            </Menu>        
       </View> 
     );
   }
