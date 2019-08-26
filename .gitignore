@@ -75,3 +75,6 @@ typings/
 # FuseBox cache
 .fusebox/
 src/components/Navigation/index.1.js
+webpack.config.dev.js
+yarn.lock
+package.json

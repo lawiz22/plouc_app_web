@@ -197,6 +197,14 @@ class PostAll extends Component {
         this.props.actionsposts.show_post_detail(this.page.showDetailview)
       }
       
+      sumProperty(arr, type) {
+        return arr.reduce((total, obj) => {
+          if (typeof obj[type] === 'string') {
+            return total + Number(obj[type]);
+          }
+          return total + obj[type];
+        }, 0);
+      }
 
       renderPostSection() {
         const {activeUser} = this.props;
@@ -205,7 +213,7 @@ class PostAll extends Component {
         const postList = Object.values(this.props.userposts)
         // console.log(postList)
         //Count les vote par post pour le tri
-        const postList2 = postList.map(obj=> ({ ...obj, countVote: obj.post_votes.length }))
+        const postList2 = postList.map(obj=> ({ ...obj, countVote: this.sumProperty(obj.post_votes, 'value') }))
         // console.log(postList2)
         //Tri par nombre de vote
         var byVote = postList2.slice(0);
@@ -214,7 +222,7 @@ class PostAll extends Component {
           });
         
         
-        // console.log(byVote);
+        console.log(byVote);
         if (byVote.length !== 0) return (
           
             <View>
