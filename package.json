@@ -19,7 +19,7 @@
     "@dlghq/postcss-dialog": "^1.15.0",
     "acorn": "^6.1.1",
     "acorn-dynamic-import": "4.0.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-plugin-optional-require": "^0.3.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-react-native": "^4.0.1",
